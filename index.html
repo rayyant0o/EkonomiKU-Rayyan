@@ -1,0 +1,3686 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EkonomiKU · Bank & Industri Keuangan Non Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* ── Surfaces (light dashboard theme) ── */
+    --bg: #eef2fb;            /* page background, soft blue-grey */
+    --bg-soft: #f6f8fe;       /* slightly lighter zone bg */
+    --surface: #ffffff;       /* cards / panels */
+    --surface-2: #f1f4fc;     /* inset elements, option bg */
+    --line: #e4e9f3;          /* borders, dividers */
+
+    /* ── Brand / accent ── */
+    --navy: #2d1b69;          /* sidebar bg, deep headings */
+    --navy-2: #3a2483;        /* gradient pair for navy */
+    --primary: #6c47ff;       /* primary purple (buttons, active) */
+    --primary-soft: #8b6dff;  /* lighter purple */
+    --accent: #6c47ff;        /* kept name for compatibility: now purple */
+    --accent-soft: #ede8ff;   /* soft purple tint bg */
+    --gold: #f5a623;          /* warm gold accent */
+    --teal: #14b8a6;
+    --coral: #ef6f6c;
+    --violet: #8b5cf6;
+    --green: #10b981;
+    --blue: #3b82f6;
+
+    /* ── Text ── */
+    --text: #1e2340;          /* near-navy primary text */
+    --text-dim: #5b6480;      /* secondary text */
+    --text-mute: #8b94ad;     /* tertiary / labels */
+
+    /* ── Gradients ── */
+    --grad-1: linear-gradient(135deg, #6c47ff 0%, #8b6dff 100%);
+    --grad-2: linear-gradient(135deg, #14b8a6 0%, #3b82f6 100%);
+    --grad-3: linear-gradient(135deg, #8b5cf6 0%, #ef6f6c 100%);
+    --grad-hero: linear-gradient(120deg, #6c47ff 0%, #8b5cf6 55%, #b06bff 100%);
+    --grad-bg: none;
+
+    /* ── Shadows ── */
+    --shadow: 0 6px 24px rgba(45,27,105,0.08);
+    --shadow-lg: 0 14px 44px rgba(45,27,105,0.14);
+    --shadow-glow: 0 10px 30px rgba(108,71,255,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ============ NOISE OVERLAY (disabled for light theme) ============ */
+  body::before {
+    content: none;
+  }
+
+  /* ============ LAYOUT ============ */
+  .app {
+    display: grid;
+    grid-template-columns: 264px 1fr;
+    min-height: 100vh;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ============ SIDEBAR (navy) ============ */
+  .sidebar {
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+    border-right: 1px solid rgba(255,255,255,0.06);
+    padding: 26px 18px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
+    padding: 0 8px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .brand-logo {
+    width: 42px; height: 42px;
+    background: var(--grad-1);
+    border-radius: 12px;
+    display: grid; place-items: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    color: #fff;
+    font-size: 20px;
+    box-shadow: 0 4px 12px rgba(108,71,255,0.4);
+  }
+
+  .brand-text { display: flex; flex-direction: column; }
+  .brand-title { font-family: 'Fraunces', serif; font-weight: 800; font-size: 17px; letter-spacing: -0.02em; color: #fff; }
+  .brand-sub { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+
+  .nav-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin: 20px 0 10px 10px;
+    font-weight: 700;
+  }
+
+  .nav-list { list-style: none; display: flex; flex-direction: column; gap: 3px; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 11px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.62);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+    position: relative;
+  }
+  .nav-item:hover {
+    background: rgba(255,255,255,0.07);
+    color: #fff;
+  }
+  .nav-item.active {
+    background: rgba(108,71,255,0.22);
+    color: #fff;
+    border-left-color: var(--primary-soft);
+  }
+  .nav-item .icon {
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    font-size: 13px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    flex-shrink: 0;
+    color: rgba(255,255,255,0.85);
+    font-weight: 700;
+    transition: all 0.2s ease;
+  }
+  .nav-item .icon-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: -0.02em;
+  }
+  .nav-item .icon-home {
+    font-size: 14px;
+  }
+  .nav-item:hover .icon {
+    background: rgba(255,255,255,0.16);
+    color: #fff;
+  }
+  .nav-item.active .icon {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  .progress-card {
+    margin-top: auto;
+    margin-bottom: 4px;
+    padding: 16px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .progress-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .progress-value {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-soft), var(--gold));
+    width: 0%;
+    transition: width 0.6s ease;
+    border-radius: 3px;
+  }
+
+  /* ============ CONTENT WRAPPER (topbar + main) ============ */
+  .content-wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 0;   /* prevent grid child from expanding beyond viewport */
+    overflow-x: hidden;
+  }
+
+  /* ============ TOPBAR ============ */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .topbar-search {
+    flex: 1;
+    max-width: 460px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    padding: 10px 18px;
+    transition: all 0.2s ease;
+  }
+  .topbar-search:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(108,71,255,0.12);
+    background: var(--surface);
+  }
+  .topbar-search .s-icon { font-size: 15px; color: var(--text-mute); }
+  .topbar-search input {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex: 1;
+    font-family: inherit;
+    font-size: 13.5px;
+    color: var(--text);
+  }
+  .topbar-search input::placeholder { color: var(--text-mute); }
+  .topbar-spacer { flex: 1; }
+  .topbar-greeting {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    padding: 6px 8px 6px 16px;
+  }
+  .topbar-greeting .tg-text { font-size: 13px; font-weight: 600; color: var(--text); }
+  .topbar-greeting .tg-text span { color: var(--text-mute); font-weight: 500; }
+  .topbar-greeting .tg-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--grad-1);
+    display: grid; place-items: center;
+    color: #fff; font-weight: 700; font-size: 14px;
+    flex-shrink: 0;
+  }
+  /* search results dropdown */
+  .search-results {
+    display: none;
+    position: absolute;
+    top: 60px; left: 40px;
+    width: 460px;
+    max-height: 360px;
+    overflow-y: auto;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    padding: 8px;
+    z-index: 50;
+  }
+  .search-results.show { display: block; }
+  .search-result-item {
+    padding: 11px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .search-result-item:hover, .search-result-item.sel { background: var(--surface-2); }
+  .search-result-item .sr-title { font-size: 13.5px; font-weight: 700; color: var(--text); }
+  .search-result-item .sr-type { font-size: 11px; color: var(--text-mute); margin-top: 2px; }
+  .search-result-empty { padding: 20px; text-align: center; color: var(--text-mute); font-size: 13px; }
+
+  /* ============ MAIN ============ */
+  .main {
+    padding: 40px 40px 64px;
+    max-width: 1180px;
+    width: 100%;
+  }
+
+  .page { display: none; animation: fadeIn 0.45s ease; }
+  .page.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .breadcrumb {
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+  .breadcrumb span.sep { opacity: 0.4; }
+
+  .page-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(34px, 4.4vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin-bottom: 16px;
+    color: var(--navy);
+  }
+  .page-title .accent { color: var(--primary); font-style: italic; font-weight: 600; }
+
+  .page-desc {
+    font-size: 16px;
+    color: var(--text-dim);
+    max-width: 680px;
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+
+  /* default heading color for light theme */
+  .modules-title, .objectives-title, .conceptmap-title,
+  .feature-content h4, .classify-title, .type-card h4,
+  .compare-head, .glossary-term, .quiz-pick-title,
+  .quiz-question, .quiz-result-msg, .acc-title {
+    color: var(--navy);
+  }
+
+  /* ============ HERO (Home) - purple banner ============ */
+  .hero {
+    position: relative;
+    background: var(--grad-hero);
+    border-radius: 28px;
+    padding: 44px 48px;
+    margin-bottom: 28px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    box-shadow: 0 18px 50px rgba(108,71,255,0.3);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 80% at 85% 30%, rgba(255,255,255,0.18), transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; flex: 1; }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 14px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 100px;
+    background: rgba(255,255,255,0.12);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .hero-eyebrow .dot {
+    width: 8px; height: 8px;
+    background: #7bf5c4;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(123,245,196,0.3);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4.5vw, 52px);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  .hero-title .stack { display: block; }
+  .hero-title .stack:nth-child(2) {
+    color: #ffd98a;
+    font-style: italic;
+    font-weight: 600;
+  }
+  .hero-desc {
+    font-size: 15.5px;
+    color: rgba(255,255,255,0.82);
+    max-width: 540px;
+    margin-bottom: 28px;
+    line-height: 1.7;
+  }
+  .hero-visual {
+    position: relative;
+    width: 240px;
+    height: 200px;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .hero-float {
+    position: absolute;
+    width: 72px; height: 72px;
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    display: grid; place-items: center;
+    font-size: 34px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+  .hero-float.f1 { top: 10px; left: 30px; animation: float1 4s ease-in-out infinite; }
+  .hero-float.f2 { top: 40px; right: 10px; animation: float2 3.5s ease-in-out infinite; }
+  .hero-float.f3 { bottom: 20px; left: 10px; animation: float1 5s ease-in-out infinite reverse; }
+  .hero-float.f4 { bottom: 5px; right: 50px; animation: float2 4.5s ease-in-out infinite; }
+  @keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  @keyframes float2 { 0%,100%{transform:translateY(-6px)} 50%{transform:translateY(6px)} }
+
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    padding: 13px 22px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), #f97316);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 8px 22px rgba(245,166,35,0.4);
+  }
+  .btn-primary:hover { box-shadow: 0 12px 28px rgba(245,166,35,0.5); }
+  .btn-ghost-light {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border-color: rgba(255,255,255,0.3);
+  }
+  .btn-ghost-light:hover { background: rgba(255,255,255,0.25); }
+
+  /* ============ STAT GRID ============ */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow);
+  }
+  .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .stat-ic {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: var(--accent-soft);
+    display: grid; place-items: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .stat-meta { display: flex; flex-direction: column; }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label { font-size: 13px; color: var(--text-dim); }
+
+  /* ============ OBJECTIVES (Tujuan Pembelajaran) ============ */
+  .objectives-block {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .objectives-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--grad-1);
+  }
+  .objectives-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .objectives-icon {
+    font-size: 28px;
+    width: 56px; height: 56px;
+    display: grid; place-items: center;
+    background: rgba(108,71,255,0.12);
+    border-radius: 14px;
+    flex-shrink: 0;
+  }
+  .objectives-title {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .objectives-sub { font-size: 14px; color: var(--text-dim); margin-top: 4px; }
+  .objectives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+  }
+  .objective-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    transition: all 0.2s ease;
+  }
+  .objective-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .objective-num {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 9px;
+    display: grid; place-items: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 15px;
+  }
+  .objective-item p { font-size: 14px; color: var(--text-dim); line-height: 1.5; padding-top: 4px; }
+
+  /* ============ PETUNJUK PENGGUNAAN ============ */
+  .guide-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .guide-step {
+    display: flex;
+    gap: 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 24px 26px;
+    box-shadow: var(--shadow);
+    transition: all 0.2s ease;
+  }
+  .guide-step:hover { transform: translateX(4px); box-shadow: var(--shadow-lg); }
+  .guide-num {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    border-radius: 13px;
+    background: var(--grad-1);
+    color: #fff;
+    display: grid; place-items: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 20px;
+    box-shadow: 0 6px 16px rgba(108,71,255,0.3);
+  }
+  .guide-body h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .guide-body p { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+  .guide-body strong { color: var(--text); font-weight: 700; }
+  .backlink-demo {
+    color: var(--primary);
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    font-weight: 600;
+  }
+  .guide-tip {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    background: var(--accent-soft);
+    border: 1px solid rgba(108,71,255,0.2);
+    border-radius: 16px;
+    padding: 18px 22px;
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  .guide-tip strong { color: var(--primary); }
+  .guide-tip-ic { font-size: 22px; flex-shrink: 0; }
+
+  /* ============ CONCEPT MAP (Peta Konsep) ============ */
+  .conceptmap-block {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 56px;
+    position: relative;
+    overflow: hidden;
+  }
+  .conceptmap-block::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--grad-2);
+  }
+  .conceptmap-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .conceptmap-icon {
+    font-size: 28px;
+    width: 56px; height: 56px;
+    display: grid; place-items: center;
+    background: rgba(46,196,182,0.12);
+    border-radius: 14px;
+    flex-shrink: 0;
+  }
+  .conceptmap-title {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .conceptmap-sub { font-size: 14px; color: var(--text-dim); margin-top: 4px; }
+
+  .cmap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .cmap-root { display: flex; justify-content: center; }
+  .cmap-node {
+    border-radius: 12px;
+    padding: 14px 22px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+    transition: all 0.2s ease;
+  }
+  .cmap-node.root {
+    background: var(--grad-1);
+    color: #fff;
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    max-width: 360px;
+    box-shadow: 0 6px 20px rgba(108,71,255,0.25);
+  }
+  /* connector below root */
+  .cmap-branches {
+    display: flex;
+    gap: 40px;
+    margin-top: 0;
+    position: relative;
+    padding-top: 36px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  /* vertical line from root down into the branch zone */
+  .cmap-branches::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    width: 2px; height: 36px;
+    background: var(--line);
+    transform: translateX(-50%);
+  }
+  .cmap-branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    min-width: 260px;
+    max-width: 420px;
+  }
+  .cmap-node.branch {
+    background: var(--coral);
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 14px rgba(239,111,108,0.25);
+  }
+  .cmap-node.branch.alt {
+    background: var(--teal);
+    box-shadow: 0 4px 14px rgba(46,196,182,0.25);
+  }
+  .cmap-node.branch:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.08);
+  }
+  .cmap-children {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+    width: 100%;
+    position: relative;
+  }
+  /* vertical line from branch node down to children group */
+  .cmap-children::before {
+    content: '';
+    position: absolute;
+    top: -24px; left: 50%;
+    width: 2px; height: 24px;
+    background: var(--line);
+    transform: translateX(-50%);
+  }
+  .cmap-leaf {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--coral);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .cmap-leaf.alt { border-left-color: var(--teal); }
+  .cmap-leaf:hover {
+    transform: translateX(4px);
+    border-color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--surface-2);
+  }
+  .cmap-leaf::after {
+    content: '→';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.2s ease;
+    color: var(--accent);
+  }
+  .cmap-leaf:hover::after { opacity: 1; right: 12px; }
+
+  @media (max-width: 760px) {
+    .cmap-branches { flex-direction: column; gap: 28px; }
+    .cmap-branches::before { display: none; }
+    .conceptmap-block { padding: 24px; }
+  }
+
+  /* ============ MODULE GRID ============ */
+  .modules-title {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .modules-sub { color: var(--text-dim); margin-bottom: 28px; }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin-bottom: 56px;
+  }
+  .module-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .module-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+  }
+  .module-num {
+    position: absolute;
+    top: 20px; right: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.1em;
+  }
+  .module-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .module-icon.c1 { background: rgba(108,71,255,0.15); color: var(--accent); }
+  .module-icon.c2 { background: rgba(46,196,182,0.15); color: var(--teal); }
+  .module-icon.c3 { background: rgba(167,139,250,0.15); color: var(--violet); }
+  .module-icon.c4 { background: rgba(108,180,238,0.15); color: var(--blue); }
+  .module-icon.c5 { background: rgba(239,111,108,0.15); color: var(--coral); }
+  .module-icon.c6 { background: rgba(245,166,35,0.15); color: var(--gold); }
+  .module-icon.c7 { background: rgba(123,211,137,0.15); color: var(--green); }
+
+  .module-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    color: var(--navy);
+  }
+  .module-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+  .module-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .module-arrow::after {
+    content: '→';
+    transition: transform 0.2s ease;
+  }
+  .module-card:hover .module-arrow::after { transform: translateX(4px); }
+
+  /* ============ CONTENT BLOCKS ============ */
+  .content-block {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .block-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--navy);
+  }
+  .block-title .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--accent);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+  }
+  .block-text {
+    font-size: 16px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+  }
+  .block-text strong { color: var(--text); font-weight: 600; }
+
+  .info-callout {
+    background: rgba(108,71,255,0.08);
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .info-callout strong { color: var(--accent); }
+
+  /* ============ FEATURE LIST ============ */
+  .feature-list { display: flex; flex-direction: column; gap: 14px; margin-top: 24px; }
+  .feature-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: var(--bg-soft);
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    transition: all 0.2s ease;
+  }
+  .feature-item:hover { border-color: var(--accent); transform: translateX(4px); }
+  .feature-num {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 10px;
+    display: grid; place-items: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 16px;
+  }
+  .feature-content h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .feature-content p { font-size: 14px; color: var(--text-dim); }
+
+  /* styled bullet list inside feature blocks */
+  .styled-list {
+    list-style: none;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .styled-list li {
+    position: relative;
+    padding: 10px 14px 10px 36px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font-size: 13.5px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    transition: all 0.2s ease;
+  }
+  .styled-list li::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(108,71,255,0.12);
+  }
+  .styled-list li:hover {
+    border-color: var(--accent);
+    transform: translateX(2px);
+  }
+  .styled-list li strong { color: var(--text); font-weight: 600; }
+
+  /* impact split (blanket guarantee positive/negative) */
+  .impact-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .impact-box {
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+  .impact-box.positive { border-left: 3px solid var(--green); }
+  .impact-box.negative { border-left: 3px solid var(--coral); }
+  .impact-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  .impact-box.positive .impact-label { color: var(--green); }
+  .impact-box.negative .impact-label { color: var(--coral); }
+  .impact-box p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  @media (max-width: 640px) {
+    .impact-split { grid-template-columns: 1fr; }
+  }
+
+  /* classify cards (Pengantar Bank - 3 classifications) */
+  .classify-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .classify-card {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .classify-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--grad-1);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  .classify-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+  .classify-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-mute);
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+  }
+  .classify-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .classify-title {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .classify-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .classify-list li {
+    position: relative;
+    padding: 8px 12px 8px 28px;
+    background: var(--surface);
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: var(--text);
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  .classify-list li::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .classify-list li:hover {
+    background: var(--surface-2);
+    transform: translateX(2px);
+  }
+
+  /* accordion (IKNB section) */
+  .accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .accordion-item {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.25s ease;
+  }
+  .accordion-item:hover { border-color: var(--accent); }
+  .accordion-item.open {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+  .accordion-head {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-family: inherit;
+    transition: all 0.2s ease;
+  }
+  .accordion-head:hover { background: rgba(108,71,255,0.04); }
+  .acc-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-mute);
+    background: var(--surface-2);
+    padding: 4px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .accordion-item.open .acc-tag {
+    background: var(--accent);
+    color: #fff;
+  }
+  .acc-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 36px; height: 36px;
+    background: var(--surface);
+    border-radius: 10px;
+  }
+  .accordion-item.open .acc-icon {
+    background: rgba(108,71,255,0.15);
+  }
+  .acc-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    flex: 1;
+  }
+  .acc-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    color: var(--text-mute);
+    transition: transform 0.3s ease, color 0.3s ease;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .accordion-item.open .acc-arrow {
+    transform: rotate(45deg);
+    color: var(--accent);
+  }
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.3s ease;
+    padding: 0 22px;
+    color: var(--text-dim);
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+  .accordion-body p { margin-bottom: 12px; }
+  .accordion-body p:last-child { margin-bottom: 0; }
+  .accordion-body strong { color: var(--text); font-weight: 600; }
+  .accordion-item.open .accordion-body {
+    max-height: 500px;
+    padding: 4px 22px 22px 22px;
+    border-top: 1px dashed var(--line);
+    padding-top: 18px;
+  }
+
+  /* ============ COMPARISON ============ */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .compare-col {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .compare-col.left { border-left: 3px solid var(--teal); }
+  .compare-col.right { border-left: 3px solid var(--gold); }
+  .compare-head {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .compare-col.left .compare-head { color: var(--teal); }
+  .compare-col.right .compare-head { color: var(--gold); }
+  .compare-row {
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--line);
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .compare-row:last-child { border: none; }
+  .compare-row strong { color: var(--text); display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; color: var(--text-mute); }
+
+  /* ============ TYPE CARDS (subcategories) ============ */
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+  }
+  .type-card {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .type-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+  }
+  .type-card .type-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-mute);
+    background: var(--surface-2);
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .type-card h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .type-card p { font-size: 13px; color: var(--text-dim); }
+  .type-card ul { list-style: none; margin-top: 8px; }
+  .type-card ul li {
+    font-size: 13px;
+    color: var(--text-dim);
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .type-card ul li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  /* ============ TABS ============ */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-soft);
+    padding: 6px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    border: 1px solid var(--line);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tab {
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+    transition: all 0.2s ease;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: #fff;
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+  /* subnote (small contextual note) */
+  .subnote {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(46,196,182,0.08);
+    border: 1px solid rgba(46,196,182,0.25);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-top: 18px;
+  }
+  .subnote-tag {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    background: rgba(46,196,182,0.15);
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-top: 2px;
+  }
+  .subnote p { font-size: 14px; color: var(--text-dim); line-height: 1.5; }
+  .subsection-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 28px 0 14px;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  /* ============ QUIZ ============ */
+  /* quiz selector cards */
+  .quiz-pick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .quiz-pick-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    font-family: inherit;
+    color: var(--text);
+  }
+  .quiz-pick-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow);
+  }
+  .quiz-pick-card.final {
+    background: linear-gradient(135deg, rgba(108,71,255,0.1), rgba(245,166,35,0.06));
+    border-color: rgba(108,71,255,0.3);
+  }
+  .quiz-pick-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: grid; place-items: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+    background: rgba(108,71,255,0.12);
+  }
+  .quiz-pick-title {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .quiz-pick-meta {
+    font-size: 12px;
+    color: var(--text-mute);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .quiz-pick-start {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .quiz-pick-start::after { content: '→'; transition: transform 0.2s ease; }
+  .quiz-pick-card:hover .quiz-pick-start::after { transform: translateX(4px); }
+
+  .quiz-back {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+    margin-bottom: 16px;
+    transition: color 0.2s ease;
+  }
+  .quiz-back:hover { color: var(--accent); }
+  .quiz-topic {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(108,71,255,0.1);
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 36px;
+  }
+  .quiz-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .quiz-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--bg);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%;
+    background: var(--grad-1);
+    transition: width 0.4s ease;
+  }
+  .quiz-question {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 28px;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+  .quiz-option {
+    padding: 16px 20px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    color: var(--text);
+    font-family: inherit;
+  }
+  .quiz-option:hover { border-color: var(--accent); transform: translateX(4px); }
+  .quiz-option .letter {
+    width: 28px; height: 28px;
+    background: var(--surface-2);
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .quiz-option.correct {
+    border-color: var(--green);
+    background: rgba(123,211,137,0.1);
+  }
+  .quiz-option.correct .letter {
+    background: var(--green);
+    color: #fff;
+  }
+  .quiz-option.wrong {
+    border-color: var(--coral);
+    background: rgba(239,111,108,0.1);
+  }
+  .quiz-option.wrong .letter {
+    background: var(--coral);
+    color: #fff;
+  }
+  .quiz-option:disabled { cursor: not-allowed; }
+  .quiz-feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; animation: fadeIn 0.3s ease; }
+  .quiz-feedback.correct {
+    background: rgba(123,211,137,0.1);
+    border: 1px solid var(--green);
+    color: var(--green);
+  }
+  .quiz-feedback.wrong {
+    background: rgba(239,111,108,0.1);
+    border: 1px solid var(--coral);
+    color: var(--coral);
+  }
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+    gap: 12px;
+  }
+
+  .quiz-result {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .quiz-result-num {
+    font-family: 'Fraunces', serif;
+    font-size: 96px;
+    font-weight: 800;
+    background: var(--grad-1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+    margin: 20px 0;
+  }
+  .quiz-result-label { font-size: 14px; color: var(--text-mute); letter-spacing: 0.1em; text-transform: uppercase; }
+  .quiz-result-msg { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 600; margin: 16px 0 8px; }
+  .quiz-result-sub { color: var(--text-dim); margin-bottom: 28px; }
+
+  /* ============ GLOSSARY ============ */
+  .glossary-search {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .glossary-search input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    padding: 14px 16px;
+    font-size: 15px;
+    outline: none;
+    font-family: inherit;
+  }
+  .glossary-search input::placeholder { color: var(--text-mute); }
+  .glossary-search .search-icon { padding: 0 16px; color: var(--text-mute); font-size: 18px; }
+
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .glossary-item {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    transition: all 0.2s ease;
+  }
+  .glossary-item:hover { border-color: var(--accent); }
+  .glossary-term {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .glossary-def { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .glossary-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: var(--text-mute);
+  }
+  .glossary-item.highlight {
+    border-color: var(--accent);
+    background: rgba(108,71,255,0.08);
+    box-shadow: 0 0 0 3px rgba(108,71,255,0.2), var(--shadow-glow);
+    animation: highlightPulse 1.4s ease;
+  }
+  @keyframes highlightPulse {
+    0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(108,71,255,0.5); }
+    40%  { transform: scale(1.02); box-shadow: 0 0 0 12px rgba(108,71,255,0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 3px rgba(108,71,255,0.2); }
+  }
+
+  /* ============ BACKLINK ============ */
+  .backlink {
+    display: inline;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 1px dashed rgba(108,71,255,0.4);
+    padding: 0 1px;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  .backlink:hover {
+    color: #fff;
+    background: var(--accent);
+    border-bottom-color: var(--accent);
+    border-radius: 3px;
+  }
+  .backlink::after {
+    content: '↗';
+    font-size: 0.75em;
+    margin-left: 2px;
+    opacity: 0.7;
+    vertical-align: super;
+    line-height: 1;
+  }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px dashed var(--line);
+    color: var(--text-mute);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  /* ============ MOBILE ============ */
+  .menu-toggle {
+    display: none;
+    background: var(--navy);
+    border: none;
+    color: #fff;
+    width: 42px; height: 42px;
+    border-radius: 11px;
+    cursor: pointer;
+    font-size: 19px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 980px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar {
+      position: fixed;
+      left: -300px;
+      top: 0;
+      width: 274px;
+      transition: left 0.3s ease;
+      z-index: 60;
+    }
+    .sidebar.open { left: 0; }
+    .menu-toggle { display: flex; }
+    .topbar { padding: 12px 18px; }
+    .main { padding: 28px 20px 56px; }
+    .hero { flex-direction: column; align-items: flex-start; padding: 32px 26px; }
+    .hero-visual { display: none; }
+    .search-results { left: 18px; right: 18px; width: auto; }
+  }
+
+  @media (max-width: 600px) {
+    .topbar { gap: 10px; padding: 12px 14px; }
+    .topbar-search { max-width: none; min-width: 0; padding: 9px 14px; }
+    .topbar-search input { font-size: 13px; }
+    .topbar-spacer { display: none; }
+    .topbar-greeting .tg-text { display: none; }
+    .topbar-greeting { padding: 4px; }
+    .topbar-greeting .tg-avatar { width: 32px; height: 32px; font-size: 13px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .content-block { padding: 22px 18px; }
+    .hero { padding: 28px 20px; border-radius: 22px; }
+    .page-title { font-size: 28px; }
+    .stat-grid { grid-template-columns: 1fr; }
+  }
+
+  /* mobile sidebar overlay */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,15,50,0.5);
+    z-index: 50;
+    backdrop-filter: blur(2px);
+  }
+  .sidebar-overlay.active { display: block; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cdd5e8; border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: #b3bdd6; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-logo">E</div>
+      <div class="brand-text">
+        <div class="brand-title">EkonomiKU</div>
+        <div class="brand-sub">Kelas SMA · IPS</div>
+      </div>
+    </div>
+
+    <div class="nav-label">Mulai</div>
+    <ul class="nav-list">
+      <li class="nav-item active" data-page="home"><span class="icon icon-home">⌂</span> Beranda</li>
+      <li class="nav-item" data-page="petunjuk"><span class="icon icon-home">?</span> Petunjuk Penggunaan</li>
+    </ul>
+
+    <div class="nav-label">Materi</div>
+    <ul class="nav-list">
+      <li class="nav-item" data-page="pengantar"><span class="icon icon-num">1</span> Pengantar Bank</li>
+      <li class="nav-item" data-page="bank-sentral"><span class="icon icon-num">2</span> Bank Sentral</li>
+      <li class="nav-item" data-page="bank-umum"><span class="icon icon-num">3</span> Bank Umum</li>
+      <li class="nav-item" data-page="bpr"><span class="icon icon-num">4</span> BPR</li>
+      <li class="nav-item" data-page="kepemilikan"><span class="icon icon-num">5</span> Kepemilikan Bank</li>
+      <li class="nav-item" data-page="syariah"><span class="icon icon-num">6</span> Konvensional vs Syariah</li>
+      <li class="nav-item" data-page="iknb"><span class="icon icon-num">7</span> IKNB</li>
+      <li class="nav-item" data-page="ojk-lps"><span class="icon icon-num">8</span> OJK & LPS</li>
+    </ul>
+
+    <div class="nav-label">Latihan & Referensi</div>
+    <ul class="nav-list">
+      <li class="nav-item" data-page="quiz"><span class="icon icon-home">✓</span> Kuis Interaktif</li>
+      <li class="nav-item" data-page="glossary"><span class="icon icon-home">A</span> Glosarium</li>
+    </ul>
+
+    <div class="progress-card">
+      <div class="progress-label">Progres belajar</div>
+      <div class="progress-value" id="progressValue">0%</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </aside>
+
+  <!-- ============ CONTENT WRAP ============ -->
+  <div class="content-wrap">
+
+    <!-- ============ TOPBAR ============ -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <div class="topbar-search">
+        <span class="s-icon">🔍</span>
+        <input type="text" id="globalSearch" placeholder="Cari materi atau istilah..." autocomplete="off" />
+      </div>
+      <div class="search-results" id="searchResults"></div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-greeting">
+        <div class="tg-text">Hai, <span>Pelajar</span></div>
+        <div class="tg-avatar">P</div>
+      </div>
+    </header>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <!-- ============ HOME ============ -->
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-content">
+          <div class="hero-eyebrow"><span class="dot"></span> Modul Pembelajaran Interaktif</div>
+          <h1 class="hero-title">
+            <span class="stack">Bank &amp; Industri</span>
+            <span class="stack">Keuangan Non Bank</span>
+          </h1>
+          <p class="hero-desc">
+            Pelajari fondasi sistem keuangan Indonesia, mulai dari peran Bank Indonesia, jenis-jenis bank, hingga lembaga keuangan non bank seperti pegadaian, asuransi, dan fintech.
+          </p>
+          <div class="cta-row">
+            <button class="btn btn-primary" onclick="goPage('petunjuk')">📘 Petunjuk Penggunaan</button>
+            <button class="btn btn-ghost-light" onclick="goPage('pengantar')">Mulai Belajar →</button>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-float f1">🏦</div>
+          <div class="hero-float f2">💳</div>
+          <div class="hero-float f3">📊</div>
+          <div class="hero-float f4">💰</div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-ic">📚</div>
+          <div class="stat-meta">
+            <div class="stat-num">8</div>
+            <div class="stat-label">Modul Materi</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ic">🧠</div>
+          <div class="stat-meta">
+            <div class="stat-num">8</div>
+            <div class="stat-label">Paket Kuis</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-ic">📖</div>
+          <div class="stat-meta">
+            <div class="stat-num">41</div>
+            <div class="stat-label">Istilah Glosarium</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="objectives-block">
+        <div class="objectives-head">
+          <span class="objectives-icon">🎯</span>
+          <div>
+            <h2 class="objectives-title">Tujuan Pembelajaran</h2>
+            <p class="objectives-sub">Setelah menyelesaikan modul ini, kamu diharapkan mampu:</p>
+          </div>
+        </div>
+        <div class="objectives-grid">
+          <div class="objective-item">
+            <span class="objective-num">1</span>
+            <p>Menjelaskan definisi lembaga keuangan.</p>
+          </div>
+          <div class="objective-item">
+            <span class="objective-num">2</span>
+            <p>Mengidentifikasi jenis-jenis lembaga keuangan.</p>
+          </div>
+          <div class="objective-item">
+            <span class="objective-num">3</span>
+            <p>Membedakan produk keuangan bank dan non bank.</p>
+          </div>
+          <div class="objective-item">
+            <span class="objective-num">4</span>
+            <p>Menganalisis risiko keuangan dalam menggunakan produk dan layanan bank dan non bank.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="conceptmap-block">
+        <div class="conceptmap-head">
+          <span class="conceptmap-icon">🗺️</span>
+          <div>
+            <h2 class="conceptmap-title">Peta Konsep</h2>
+            <p class="conceptmap-sub">Gambaran besar materi. Klik salah satu cabang untuk langsung membuka modulnya.</p>
+          </div>
+        </div>
+
+        <div class="cmap">
+          <!-- Root -->
+          <div class="cmap-root">
+            <div class="cmap-node root">Bank dan Industri Keuangan Non Bank</div>
+          </div>
+
+          <!-- Two main branches -->
+          <div class="cmap-branches">
+
+            <!-- BANK branch -->
+            <div class="cmap-branch">
+              <div class="cmap-node branch" onclick="goPage('pengantar')">🏦 Bank</div>
+              <div class="cmap-children">
+                <button class="cmap-leaf" onclick="goPage('bank-sentral')">Bank Sentral</button>
+                <button class="cmap-leaf" onclick="goPage('bank-umum')">Bank Umum</button>
+                <button class="cmap-leaf" onclick="goPage('bpr')">Bank Perkreditan Rakyat (BPR)</button>
+              </div>
+            </div>
+
+            <!-- IKNB branch -->
+            <div class="cmap-branch">
+              <div class="cmap-node branch alt" onclick="goPage('iknb')">📊 Industri Keuangan Non Bank</div>
+              <div class="cmap-children">
+                <button class="cmap-leaf alt" onclick="goPage('iknb')">Pasar Modal</button>
+                <button class="cmap-leaf alt" onclick="goPage('iknb')">Koperasi</button>
+                <button class="cmap-leaf alt" onclick="goPage('iknb')">Perusahaan Asuransi</button>
+                <button class="cmap-leaf alt" onclick="goPage('iknb')">Pegadaian</button>
+                <button class="cmap-leaf alt" onclick="goPage('iknb')">Leasing</button>
+                <button class="cmap-leaf alt" onclick="goPage('iknb')">Fintech</button>
+                <button class="cmap-leaf alt" onclick="goPage('iknb')">Dana Pensiun</button>
+              </div>
+            </div>
+
+            <!-- OJK & LPS branch -->
+            <div class="cmap-branch">
+              <div class="cmap-node branch" onclick="goPage('ojk-lps')" style="background: var(--violet); box-shadow: 0 4px 14px rgba(139,92,246,0.3);">⚖️ Lembaga Pengawas & Penjamin</div>
+              <div class="cmap-children">
+                <button class="cmap-leaf" onclick="goPage('ojk-lps')" style="border-left-color: var(--violet);">OJK (Otoritas Jasa Keuangan)</button>
+                <button class="cmap-leaf" onclick="goPage('ojk-lps')" style="border-left-color: var(--violet);">LPS (Lembaga Penjamin Simpanan)</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <h2 class="modules-title">Jelajahi Modul</h2>
+      <p class="modules-sub">Mulai dari mana saja, atau ikuti urutan untuk pemahaman bertahap.</p>
+
+      <div class="modules-grid">
+        <div class="module-card" onclick="goPage('pengantar')">
+          <div class="module-num">01</div>
+          <div class="module-icon c1">🏦</div>
+          <h3 class="module-title">Pengantar Bank</h3>
+          <p class="module-desc">Pahami apa itu bank dan klasifikasinya berdasarkan fungsi, kepemilikan, dan prinsip operasional.</p>
+          <span class="module-arrow">Pelajari </span>
+        </div>
+
+        <div class="module-card" onclick="goPage('bank-sentral')">
+          <div class="module-num">02</div>
+          <div class="module-icon c2">🏛️</div>
+          <h3 class="module-title">Bank Sentral</h3>
+          <p class="module-desc">Mengenal Bank Indonesia sebagai induk dari semua bank dan penjaga stabilitas rupiah.</p>
+          <span class="module-arrow">Pelajari </span>
+        </div>
+
+        <div class="module-card" onclick="goPage('bank-umum')">
+          <div class="module-num">03</div>
+          <div class="module-icon c3">💳</div>
+          <h3 class="module-title">Bank Umum</h3>
+          <p class="module-desc">Tabungan, deposito, kredit, dan jasa-jasa lain yang ditawarkan bank umum.</p>
+          <span class="module-arrow">Pelajari </span>
+        </div>
+
+        <div class="module-card" onclick="goPage('bpr')">
+          <div class="module-num">04</div>
+          <div class="module-icon c4">🏪</div>
+          <h3 class="module-title">BPR</h3>
+          <p class="module-desc">Bank Perkreditan Rakyat: fungsinya, kegiatan, dan batasan operasinya.</p>
+          <span class="module-arrow">Pelajari </span>
+        </div>
+
+        <div class="module-card" onclick="goPage('kepemilikan')">
+          <div class="module-num">05</div>
+          <div class="module-icon c5">🌐</div>
+          <h3 class="module-title">Kepemilikan Bank</h3>
+          <p class="module-desc">Bedakan bank pemerintah, bank swasta, dan bank asing yang ada di Indonesia.</p>
+          <span class="module-arrow">Pelajari </span>
+        </div>
+
+        <div class="module-card" onclick="goPage('syariah')">
+          <div class="module-num">06</div>
+          <div class="module-icon c6">☪</div>
+          <h3 class="module-title">Konvensional vs Syariah</h3>
+          <p class="module-desc">Perbedaan mendasar antara bank konvensional dan bank syariah.</p>
+          <span class="module-arrow">Pelajari </span>
+        </div>
+
+        <div class="module-card" onclick="goPage('iknb')">
+          <div class="module-num">07</div>
+          <div class="module-icon c7">📊</div>
+          <h3 class="module-title">IKNB</h3>
+          <p class="module-desc">Pasar modal, koperasi, asuransi, pegadaian, leasing, fintech, dana pensiun.</p>
+          <span class="module-arrow">Pelajari </span>
+        </div>
+
+        <div class="module-card" onclick="goPage('ojk-lps')">
+          <div class="module-num">08</div>
+          <div class="module-icon c1">⚖️</div>
+          <h3 class="module-title">OJK & LPS</h3>
+          <p class="module-desc">Lembaga pengawas dan penjamin keuangan yang melindungi masyarakat.</p>
+          <span class="module-arrow">Pelajari </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PETUNJUK PENGGUNAAN ============ -->
+    <section class="page" id="page-petunjuk">
+      <div class="breadcrumb">Panduan <span class="sep">/</span> Petunjuk Penggunaan</div>
+      <h1 class="page-title">Petunjuk <span class="accent">Penggunaan</span></h1>
+      <p class="page-desc">Baru pertama kali di sini? Tenang. Halaman ini menjelaskan cara memakai media pembelajaran ini langkah demi langkah supaya kamu bisa belajar dengan nyaman.</p>
+
+      <div class="guide-steps">
+        <div class="guide-step">
+          <div class="guide-num">1</div>
+          <div class="guide-body">
+            <h3>🧭 Navigasi lewat menu samping</h3>
+            <p>Semua materi ada di menu sebelah kiri. Klik judul mana saja untuk langsung membuka topiknya. Materi diurutkan dari 1 sampai 8, jadi kamu bisa mengikutinya secara berurutan, atau melompat ke topik yang kamu butuhkan.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">2</div>
+          <div class="guide-body">
+            <h3>🔍 Cari cepat dengan kolom pencarian</h3>
+            <p>Di bagian atas ada kolom pencarian. Ketik nama materi (misalnya "BPR") atau istilah (misalnya "deposito"), lalu klik hasil yang muncul untuk langsung melompat ke sana.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">3</div>
+          <div class="guide-body">
+            <h3>🔗 Klik kata bergaris bawah</h3>
+            <p>Di dalam materi, beberapa kata penting ditandai dengan <span class="backlink-demo">garis bawah berwarna</span>. Itu adalah tautan ke Glosarium. Klik kata tersebut untuk langsung melihat artinya tanpa kehilangan posisi belajarmu.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">4</div>
+          <div class="guide-body">
+            <h3>📂 Buka kartu yang bisa diperluas</h3>
+            <p>Pada materi IKNB, penjelasan disusun dalam bentuk kartu accordion. Klik judul kartunya untuk membuka atau menutup penjelasan. Kartu pertama sudah terbuka sebagai contoh.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">5</div>
+          <div class="guide-body">
+            <h3>🧠 Uji pemahaman lewat kuis</h3>
+            <p>Buka menu <strong>Kuis Interaktif</strong>. Ada 8 paket kuis: 7 kuis per materi dan 1 kuis gabungan. Pilih salah satu, jawab soalnya, dan kamu akan langsung tahu jawaban benar beserta penjelasannya.</p>
+          </div>
+        </div>
+        <div class="guide-step">
+          <div class="guide-num">6</div>
+          <div class="guide-body">
+            <h3>📊 Pantau progres belajarmu</h3>
+            <p>Di bawah menu samping ada indikator <strong>Progres Belajar</strong>. Angkanya bertambah otomatis setiap kali kamu membuka modul materi baru, jadi kamu tahu seberapa jauh kemajuanmu.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-tip">
+        <span class="guide-tip-ic">💡</span>
+        <div>
+          <strong>Tips:</strong> Cara paling enak belajar di sini adalah mulai dari "Pengantar Bank", lanjut berurutan sampai "OJK & LPS", lalu tutup dengan mengerjakan kuis gabungan untuk mengukur pemahaman menyeluruh.
+        </div>
+      </div>
+
+      <div class="cta-row" style="margin-top:32px">
+        <button class="btn btn-primary" onclick="goPage('pengantar')">Mulai dari Materi Pertama →</button>
+      </div>
+    </section>
+
+    <!-- ============ PENGANTAR BANK ============ -->
+    <section class="page" id="page-pengantar">
+      <div class="breadcrumb">Modul 01 <span class="sep">/</span> Pengantar Bank</div>
+      <h1 class="page-title">Apa itu <span class="accent">Bank</span>?</h1>
+      <p class="page-desc">Bank adalah lembaga keuangan yang menjadi tulang punggung sistem ekonomi. Bank menerima simpanan masyarakat, memberikan pinjaman, dan menyediakan berbagai jasa keuangan.</p>
+
+      <div class="content-block">
+        <h2 class="block-title">Tiga Cara Mengelompokkan Bank <span class="badge">PENTING</span></h2>
+        <p class="block-text">Bank di Indonesia dapat diklasifikasikan menjadi tiga kelompok besar berdasarkan kriteria yang berbeda. Memahami klasifikasi ini akan membantumu mengenali peran masing-masing bank dalam perekonomian.</p>
+
+        <div class="classify-grid">
+          <div class="classify-card">
+            <div class="classify-num">01</div>
+            <div class="classify-label">Klasifikasi</div>
+            <h4 class="classify-title">Berdasarkan Fungsinya</h4>
+            <ul class="classify-list">
+              <li>Bank Sentral</li>
+              <li>Bank Umum</li>
+              <li>Bank Perkreditan Rakyat (BPR)</li>
+            </ul>
+          </div>
+
+          <div class="classify-card">
+            <div class="classify-num">02</div>
+            <div class="classify-label">Klasifikasi</div>
+            <h4 class="classify-title">Berdasarkan Kepemilikan</h4>
+            <ul class="classify-list">
+              <li>Bank Milik Pemerintah</li>
+              <li>Bank Milik Swasta</li>
+              <li>Bank Milik Asing</li>
+            </ul>
+          </div>
+
+          <div class="classify-card">
+            <div class="classify-num">03</div>
+            <div class="classify-label">Klasifikasi</div>
+            <h4 class="classify-title">Berdasarkan Prinsip Operasional</h4>
+            <ul class="classify-list">
+              <li>Bank Konvensional</li>
+              <li>Bank Syariah</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <strong>Tahukah kamu?</strong> Bank pertama di Indonesia adalah De Javasche Bank yang berdiri tahun 1828, dan kini telah berubah menjadi Bank Indonesia.
+        </div>
+      </div>
+
+      <div class="content-block">
+        <h2 class="block-title">🎬 Video Pembelajaran <span class="badge">TONTON</span></h2>
+        <p class="block-text">Tonton video berikut untuk memperkuat pemahamanmu tentang bank dan sistem keuangan Indonesia.</p>
+        <div style="position:relative; width:100%; padding-bottom:56.25%; border-radius:14px; overflow:hidden; background:#000; box-shadow: 0 8px 28px rgba(45,27,105,0.18);">
+          <iframe
+            src="https://www.youtube.com/embed/_eUITzzeMcw"
+            title="Video Pembelajaran Bank dan Sistem Keuangan Indonesia"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            style="position:absolute; top:0; left:0; width:100%; height:100%; border-radius:14px;">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="goPage('bank-sentral')">Lanjut ke Bank Sentral →</button>
+        <button class="btn" onclick="goPage('home')">Kembali</button>
+      </div>
+    </section>
+
+    <!-- ============ BANK SENTRAL ============ -->
+    <section class="page" id="page-bank-sentral">
+      <div class="breadcrumb">Modul 02 <span class="sep">/</span> Bank Sentral</div>
+      <h1 class="page-title">Bank <span class="accent">Sentral</span></h1>
+      <p class="page-desc"><a class="backlink" data-term="Bank Sentral">Bank sentral</a> adalah induk dari semua bank di Indonesia (banker of banks). Di Indonesia, peran ini dijalankan oleh Bank Indonesia (BI).</p>
+
+      <div class="content-block">
+        <h2 class="block-title">Bank Indonesia <span class="badge">UU NO. 13/1999</span></h2>
+        <p class="block-text">Bank Indonesia adalah bank yang berfungsi sebagai <strong>bank sirkulasi</strong> dan sebagai <strong>induk dari bank-bank lain</strong> (banker of banks). Berdasarkan Undang-Undang Nomor 13 Tahun 1999, tujuan utama BI adalah <strong>mencapai dan memelihara kestabilan nilai rupiah</strong>.</p>
+
+        <div class="info-callout">
+          <strong>Analoginya:</strong> Jika bank-bank lain adalah kapal di lautan ekonomi, Bank Indonesia adalah mercusuar yang menjaga arah dan menjaga semua kapal tetap aman.
+        </div>
+      </div>
+
+      <div class="content-block">
+        <h2 class="block-title">Tiga Tugas Utama Bank Indonesia</h2>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-num">1</div>
+            <div class="feature-content">
+              <h4>Mengeluarkan Alat Pembayaran yang Sah</h4>
+              <p>Bank Indonesia memiliki <strong>hak monopoli</strong> untuk mencetak dan mengedarkan uang kertas serta uang logam sebagai alat pembayaran resmi di Indonesia.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">2</div>
+            <div class="feature-content">
+              <h4>Menetapkan & Melaksanakan Kebijakan Moneter</h4>
+              <p><a class="backlink" data-term="Kebijakan Moneter">Kebijakan</a> pengendalian jumlah uang yang beredar agar sesuai dengan jumlah yang dibutuhkan sistem perekonomian.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">3</div>
+            <div class="feature-content">
+              <h4>Mengatur & Menjaga Kelancaran Sistem Pembayaran</h4>
+              <p>Bank Indonesia berwenang untuk <strong>melaksanakan dan memberikan persetujuan dan ijin</strong> atas penyelenggaraan jasa sistem pembayaran serta melaporkan kegiatannya.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="goPage('bank-umum')">Lanjut ke Bank Umum →</button>
+        <button class="btn" onclick="goPage('pengantar')">← Kembali</button>
+      </div>
+    </section>
+
+    <!-- ============ BANK UMUM ============ -->
+    <section class="page" id="page-bank-umum">
+      <div class="breadcrumb">Modul 03 <span class="sep">/</span> Bank Umum</div>
+      <h1 class="page-title">Bank <span class="accent">Umum</span></h1>
+      <p class="page-desc"><a class="backlink" data-term="Bank Umum">Bank umum</a> adalah badan usaha yang menghimpun dana dari masyarakat dalam bentuk simpanan dan menyalurkannya kepada masyarakat dalam rangka meningkatkan taraf hidup rakyat banyak.</p>
+
+      <div class="content-block">
+        <h2 class="block-title">Tiga Fungsi Utama Bank Umum</h2>
+        <div class="tabs">
+          <button class="tab active" data-tab="t1">💰 Penghimpun Dana</button>
+          <button class="tab" data-tab="t2">📤 Penyalur Dana</button>
+          <button class="tab" data-tab="t3">🛎️ Pelayanan Jasa</button>
+        </div>
+
+        <div class="tab-content active" id="t1">
+          <p class="block-text">Bank menerima uang dari masyarakat dalam tiga bentuk simpanan utama:</p>
+          <div class="type-grid">
+            <div class="type-card">
+              <span class="type-tag">Saving Deposit</span>
+              <h4><a class="backlink" data-term="Tabungan">Tabungan</a></h4>
+              <p>Produk simpanan di bank yang penyetoran dan penarikannya dapat dilakukan kapan saja.</p>
+            </div>
+            <div class="type-card">
+              <span class="type-tag">Time Deposit</span>
+              <h4><a class="backlink" data-term="Deposito">Deposito</a></h4>
+              <p>Produk simpanan di bank yang penyetorannya maupun penarikannya hanya dapat dilakukan pada waktu tertentu saja.</p>
+            </div>
+            <div class="type-card">
+              <span class="type-tag">Demand Deposit</span>
+              <h4><a class="backlink" data-term="Giro">Giro</a></h4>
+              <p>Produk simpanan perbankan yang dananya dapat ditarik kapan saja menggunakan cek, bilyet giro, atau pemindahbukuan.</p>
+            </div>
+          </div>
+
+          <div class="subnote">
+            <span class="subnote-tag">Catatan</span>
+            <p>Berbeda dengan <a class="backlink" data-term="Tabungan">tabungan</a>, <a class="backlink" data-term="Giro">giro</a> difokuskan untuk transaksi bisnis frekuensi tinggi dalam jumlah besar.</p>
+          </div>
+
+          <h3 class="subsection-title">Surat Berharga pada Giro</h3>
+          <div class="type-grid">
+            <div class="type-card">
+              <h4><a class="backlink" data-term="Cek">Cek</a></h4>
+              <p>Surat berharga di mana orang yang menerimanya bisa langsung menguangkannya di bank.</p>
+            </div>
+            <div class="type-card">
+              <h4><a class="backlink" data-term="Bilyet Giro">Bilyet Giro</a></h4>
+              <p>Surat berharga di mana orang yang menerimanya tidak bisa menguangkan giro itu di bank, melainkan disetorkan ke dalam rekening.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="t2">
+          <p class="block-text">Dana yang terkumpul disalurkan kembali ke masyarakat dalam bentuk kredit:</p>
+          <div class="type-grid">
+            <div class="type-card">
+              <span class="type-tag">KPR</span>
+              <h4><a class="backlink" data-term="KPR">Kredit Pemilikan Rumah</a></h4>
+              <p>Kredit yang digunakan untuk membeli rumah atau untuk kebutuhan konsumtif lainnya dengan jaminan/agunan berupa rumah.</p>
+            </div>
+            <div class="type-card">
+              <span class="type-tag">KMK</span>
+              <h4><a class="backlink" data-term="Kredit Modal Kerja">Kredit Modal Kerja</a></h4>
+              <p>Kredit ini diberikan untuk pembiayaan modal kerja perusahaan baik perusahaan perorangan maupun yang berbadan hukum.</p>
+            </div>
+            <div class="type-card">
+              <span class="type-tag">KI</span>
+              <h4><a class="backlink" data-term="Kredit Investasi">Kredit Investasi</a></h4>
+              <p>Kredit yang dapat digunakan untuk membiayai pembangunan atau perluasan gedung maupun pabrik, pembelian mesin dan alat produksi, serta lain-lain investasi usaha.</p>
+            </div>
+            <div class="type-card">
+              <span class="type-tag">CC</span>
+              <h4><a class="backlink" data-term="Kartu Kredit">Kartu Kredit</a></h4>
+              <p>Alat pembayaran non tunai, dimana penerbit kartu kredit memberikan pinjaman uang kepada <a class="backlink" data-term="Konsumen">konsumen</a>, bukan mengambil uang dari rekening.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="t3">
+          <p class="block-text">Bank juga menyediakan berbagai jasa untuk memudahkan transaksi:</p>
+          <div class="type-grid">
+            <div class="type-card">
+              <h4>🔄 Jasa Pengiriman Uang</h4>
+              <ul>
+                <li>Setoran tunai di kantor cabang</li>
+                <li>Transfer via ATM</li>
+                <li>Internet Banking</li>
+                <li>Mobile Banking</li>
+              </ul>
+            </div>
+            <div class="type-card">
+              <h4>💡 Jasa Transaksi Pembayaran</h4>
+              <ul>
+                <li>Tagihan listrik (PLN)</li>
+                <li>Pembayaran uang sekolah/kuliah</li>
+                <li>Tagihan air (PDAM)</li>
+                <li>Pajak</li>
+              </ul>
+            </div>
+            <div class="type-card">
+              <h4>🛒 Jasa Transaksi Pembelian</h4>
+              <ul>
+                <li>Pulsa telepon</li>
+                <li>Tiket kereta api</li>
+                <li>Tiket pesawat</li>
+                <li>Token listrik</li>
+              </ul>
+            </div>
+            <div class="type-card">
+              <h4>🔒 Safe Deposit Box</h4>
+              <p>Penyewaan kotak penyimpanan barang berharga (perhiasan, dokumen penting, surat tanah) di brankas bank yang sangat aman.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="goPage('bpr')">Lanjut ke BPR →</button>
+        <button class="btn" onclick="goPage('bank-sentral')">← Kembali</button>
+      </div>
+    </section>
+
+    <!-- ============ BPR ============ -->
+    <section class="page" id="page-bpr">
+      <div class="breadcrumb">Modul 04 <span class="sep">/</span> BPR</div>
+      <h1 class="page-title">Bank Perkreditan <span class="accent">Rakyat</span></h1>
+      <p class="page-desc"><a class="backlink" data-term="BPR">BPR</a> adalah bank yang hanya menerima simpanan dalam bentuk <a class="backlink" data-term="Deposito">deposito</a> berjangka, <a class="backlink" data-term="Tabungan">tabungan</a>, atau bentuk lain yang sejenis. BPR fokus melayani masyarakat di daerah dan <a class="backlink" data-term="UMKM">UMKM</a>.</p>
+
+      <div class="content-block">
+        <h2 class="block-title">Boleh ✅ vs Tidak Boleh ❌</h2>
+        <div class="compare-grid">
+          <div class="compare-col left">
+            <div class="compare-head">✅ Kegiatan yang Boleh</div>
+            <div class="compare-row">
+              <strong>Penghimpunan</strong>
+              Menghimpun dana dari masyarakat dalam bentuk <a class="backlink" data-term="Tabungan">tabungan</a> dan <a class="backlink" data-term="Deposito">deposito</a>.
+            </div>
+            <div class="compare-row">
+              <strong>Penyaluran</strong>
+              Menyalurkan dana kepada masyarakat dalam bentuk pinjaman (kredit).
+            </div>
+            <div class="compare-row">
+              <strong>Pembiayaan</strong>
+              Menyediakan pembiayaan dengan prinsip bagi hasil bagi nasabah.
+            </div>
+            <div class="compare-row">
+              <strong>Penempatan Dana</strong>
+              Menempatkan dana dalam <a class="backlink" data-term="SBI">SBI</a>, deposito, atau tabungan di bank lain.
+            </div>
+          </div>
+          <div class="compare-col right">
+            <div class="compare-head">❌ Yang Tidak Boleh</div>
+            <div class="compare-row">
+              <strong>Giro</strong>
+              BPR tidak boleh menerima simpanan dalam bentuk <a class="backlink" data-term="Giro">giro</a>.
+            </div>
+            <div class="compare-row">
+              <strong>Penyertaan Modal</strong>
+              BPR tidak boleh melakukan penyertaan modal di perusahaan lain.
+            </div>
+            <div class="compare-row">
+              <strong>Asuransi</strong>
+              BPR tidak boleh menjalankan kegiatan usaha perasuransian.
+            </div>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <strong>Mengapa BPR penting?</strong> BPR menjangkau masyarakat di pelosok desa dan pelaku <a class="backlink" data-term="UMKM">UMKM</a> yang sering kesulitan mengakses bank umum. BPR adalah jembatan inklusi keuangan.
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="goPage('kepemilikan')">Lanjut ke Kepemilikan Bank →</button>
+        <button class="btn" onclick="goPage('bank-umum')">← Kembali</button>
+      </div>
+    </section>
+
+    <!-- ============ KEPEMILIKAN ============ -->
+    <section class="page" id="page-kepemilikan">
+      <div class="breadcrumb">Modul 05 <span class="sep">/</span> Kepemilikan Bank</div>
+      <h1 class="page-title">Jenis Bank Berdasarkan <span class="accent">Kepemilikan</span></h1>
+      <p class="page-desc">Siapa yang memiliki sebuah bank menentukan jenisnya. Ada tiga kelompok besar: bank pemerintah, bank swasta, dan bank asing.</p>
+
+      <div class="content-block">
+        <h2 class="block-title">🏛️ Bank Milik Pemerintah</h2>
+        <p class="block-text">Saham mayoritas dimiliki oleh pemerintah Indonesia, baik pemerintah pusat (BUMN) maupun pemerintah daerah (BUMD).</p>
+
+        <div class="type-grid">
+          <div class="type-card">
+            <span class="type-tag">BUMN · Pusat</span>
+            <h4>Pemerintah Pusat</h4>
+            <ul>
+              <li>Bank Mandiri</li>
+              <li>Bank Rakyat Indonesia (BRI)</li>
+              <li>Bank Negara Indonesia (BNI)</li>
+              <li>Bank Tabungan Negara (BTN)</li>
+              <li>Bank Syariah Indonesia (BSI)</li>
+            </ul>
+          </div>
+          <div class="type-card">
+            <span class="type-tag">BUMD · Daerah</span>
+            <h4>Pemerintah Daerah</h4>
+            <ul>
+              <li>Bank DKI</li>
+              <li>Bank Jabar Banten (BJB)</li>
+              <li>Bank Jatim</li>
+              <li>Bank Nagari (Sumbar)</li>
+              <li>Bank Papua</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-block">
+        <h2 class="block-title">🏢 Bank Milik Swasta</h2>
+        <p class="block-text">Saham dimiliki oleh pihak swasta nasional (warga negara Indonesia atau perusahaan swasta Indonesia).</p>
+        <div class="type-grid">
+          <div class="type-card"><h4>Bank Central Asia (BCA)</h4><p>Bank swasta terbesar di Indonesia.</p></div>
+          <div class="type-card"><h4>Bank CIMB Niaga</h4><p>Bank dengan jaringan internasional yang luas.</p></div>
+          <div class="type-card"><h4>Bank Danamon</h4><p>Salah satu bank swasta tertua.</p></div>
+          <div class="type-card"><h4>Bank Permata</h4><p>Bank dengan layanan retail dan korporat.</p></div>
+          <div class="type-card"><h4>Bank OCBC NISP</h4><p>Bank swasta tertua keempat di Indonesia.</p></div>
+          <div class="type-card"><h4>Bank Mega</h4><p>Bagian dari grup CT Corp.</p></div>
+          <div class="type-card"><h4>Bank Panin</h4><p>Salah satu bank swasta nasional terbesar di Indonesia.</p></div>
+        </div>
+      </div>
+
+      <div class="content-block">
+        <h2 class="block-title">🌍 Bank Milik Asing</h2>
+        <p class="block-text">Cabang dari bank yang berkantor pusat di luar negeri. Mereka mendapat izin beroperasi di Indonesia.</p>
+        <div class="type-grid">
+          <div class="type-card">
+            <span class="type-tag">UK / Hongkong</span>
+            <h4>HSBC</h4>
+            <p>Hongkong and Shanghai Banking Corporation.</p>
+          </div>
+          <div class="type-card">
+            <span class="type-tag">Amerika Serikat</span>
+            <h4>Citibank</h4>
+            <p>Bagian dari Citigroup, AS.</p>
+          </div>
+          <div class="type-card">
+            <span class="type-tag">Malaysia</span>
+            <h4>Maybank</h4>
+            <p>Bank terbesar di Malaysia.</p>
+          </div>
+          <div class="type-card">
+            <span class="type-tag">Korea Selatan</span>
+            <h4>Hana Bank</h4>
+            <p>Bank besar dari Korea Selatan.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="goPage('syariah')">Lanjut ke Bank Syariah →</button>
+        <button class="btn" onclick="goPage('bpr')">← Kembali</button>
+      </div>
+    </section>
+
+    <!-- ============ SYARIAH VS KONVENSIONAL ============ -->
+    <section class="page" id="page-syariah">
+      <div class="breadcrumb">Modul 06 <span class="sep">/</span> Konvensional vs Syariah</div>
+      <h1 class="page-title">Bank Konvensional <span class="accent">vs</span> Syariah</h1>
+      <p class="page-desc">Berdasarkan prinsip operasionalnya, bank di Indonesia dibagi menjadi dua: <a class="backlink" data-term="Bank Konvensional">Bank Konvensional</a> yang menggunakan sistem bunga, dan <a class="backlink" data-term="Bank Syariah">Bank Syariah</a> yang menggunakan prinsip syariat Islam.</p>
+
+      <div class="content-block">
+        <h2 class="block-title">Perbedaan Utama</h2>
+        <div class="compare-grid">
+          <div class="compare-col left">
+            <div class="compare-head">☪ Bank Syariah</div>
+            <div class="compare-row"><strong>Investasi</strong>Hanya pada usaha yang halal</div>
+            <div class="compare-row"><strong>Sistem</strong>Bagi hasil, margin keuntungan, dan fee</div>
+            <div class="compare-row"><strong>Besaran imbal hasil</strong>Berubah-ubah sesuai kinerja usaha</div>
+            <div class="compare-row"><strong>Orientasi</strong>Profit dan falah, yaitu kebahagiaan dunia & akhirat</div>
+            <div class="compare-row"><strong>Hubungan</strong>Bank & nasabah adalah mitra</div>
+            <div class="compare-row"><strong>Pengawasan</strong>Diawasi <a class="backlink" data-term="DPS">Dewan Pengawas Syariah (DPS)</a></div>
+          </div>
+          <div class="compare-col right">
+            <div class="compare-head">🏦 Bank Konvensional</div>
+            <div class="compare-row"><strong>Investasi</strong>Pada usaha halal maupun haram</div>
+            <div class="compare-row"><strong>Sistem</strong>Sistem bunga (interest)</div>
+            <div class="compare-row"><strong>Besaran bunga</strong>Tetap (sesuai perjanjian)</div>
+            <div class="compare-row"><strong>Orientasi</strong>Profit oriented, yaitu kebahagiaan dunia saja</div>
+            <div class="compare-row"><strong>Hubungan</strong>Bank & nasabah adalah debitur-kreditur</div>
+            <div class="compare-row"><strong>Pengawasan</strong>Tidak ada pengawasan syariah</div>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <strong>Bagi hasil vs bunga:</strong> Bunga itu pasti, misalnya 5% setahun apapun yang terjadi. Bagi hasil itu fleksibel: kalau usaha bank untung besar, nasabah dapat besar. Kalau untung kecil, nasabah dapat kecil juga.
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="goPage('iknb')">Lanjut ke IKNB →</button>
+        <button class="btn" onclick="goPage('kepemilikan')">← Kembali</button>
+      </div>
+    </section>
+
+    <!-- ============ IKNB ============ -->
+    <section class="page" id="page-iknb">
+      <div class="breadcrumb">Modul 07 <span class="sep">/</span> IKNB</div>
+      <h1 class="page-title">Industri Keuangan <span class="accent">Non Bank</span></h1>
+      <p class="page-desc"><a class="backlink" data-term="IKNB">IKNB</a> adalah lembaga yang menyelenggarakan aktivitas keuangan berupa penghimpunan dana dari masyarakat lalu menyalurkannya untuk kegiatan investasi di perusahaan serta menerbitkan surat berharga.</p>
+
+      <div class="content-block">
+        <h2 class="block-title">Tujuh Jenis IKNB</h2>
+        <p class="block-text" style="margin-bottom:16px">Klik setiap kartu untuk membaca penjelasannya. Kartu pertama sudah dibuka sebagai contoh.</p>
+
+        <div class="accordion">
+          <div class="accordion-item open">
+            <button class="accordion-head">
+              <span class="acc-tag">01</span>
+              <span class="acc-icon">📈</span>
+              <span class="acc-title">Pasar Modal</span>
+              <span class="acc-arrow">+</span>
+            </button>
+            <div class="accordion-body">
+              <p><a class="backlink" data-term="Pasar Modal">Pasar modal</a> adalah <strong>tempat bertemunya pihak yang membutuhkan dana</strong> (<a class="backlink" data-term="Emiten">emiten</a>/perusahaan) <strong>dan pihak yang memiliki dana</strong> (investor) melalui perdagangan instrumen keuangan jangka panjang, seperti <a class="backlink" data-term="Saham">saham</a> dan <a class="backlink" data-term="Obligasi">obligasi</a>.</p>
+              <p>Di Indonesia, pasar modal diselenggarakan oleh <strong>Bursa Efek Indonesia (BEI / IDX)</strong>.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-head">
+              <span class="acc-tag">02</span>
+              <span class="acc-icon">🤝</span>
+              <span class="acc-title">Koperasi</span>
+              <span class="acc-arrow">+</span>
+            </button>
+            <div class="accordion-body">
+              <p><a class="backlink" data-term="Koperasi">Koperasi</a> adalah <strong>badan usaha atau perkumpulan otonom</strong> yang dimiliki dan dikelola oleh anggota secara sukarela untuk meningkatkan kesejahteraan bersama berdasarkan asas kekeluargaan.</p>
+              <p>Berlandaskan <strong>UU No. 25 Tahun 1992</strong>, koperasi menjalankan prinsip ekonomi demokratis (satu anggota satu suara), bukan semata-mata mencari keuntungan, melainkan memenuhi kebutuhan anggota.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-head">
+              <span class="acc-tag">03</span>
+              <span class="acc-icon">🛡️</span>
+              <span class="acc-title">Asuransi</span>
+              <span class="acc-arrow">+</span>
+            </button>
+            <div class="accordion-body">
+              <p><a class="backlink" data-term="Asuransi">Asuransi</a> adalah <strong>perjanjian kontrak antara nasabah</strong> (<a class="backlink" data-term="Tertanggung">tertanggung</a>) <strong>dan perusahaan asuransi</strong> (<a class="backlink" data-term="Penanggung">penanggung</a>), di mana nasabah membayar <a class="backlink" data-term="Premi">premi</a> untuk mendapatkan perlindungan finansial atas risiko kerugian tak terduga.</p>
+              <p>Asuransi berfungsi <strong>meminimalisir dampak ekonomi</strong> dari kejadian tidak pasti, seperti sakit, kecelakaan, atau kematian, sesuai dengan ketentuan dalam <a class="backlink" data-term="Polis">polis</a>.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-head">
+              <span class="acc-tag">04</span>
+              <span class="acc-icon">💍</span>
+              <span class="acc-title">Pegadaian</span>
+              <span class="acc-arrow">+</span>
+            </button>
+            <div class="accordion-body">
+              <p><a class="backlink" data-term="Pegadaian">Pegadaian</a> adalah lembaga keuangan non-bank milik negara (<strong>BUMN/anak usaha BRI</strong>) di Indonesia yang menyediakan <strong>solusi pinjaman cepat dengan jaminan barang bergerak atau tidak bergerak</strong>, serta layanan investasi emas.</p>
+              <p>Pegadaian melayani kebutuhan dana tunai masyarakat menengah ke bawah dengan prinsip <strong>gadai yang aman, terpercaya, dan berizin</strong>.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-head">
+              <span class="acc-tag">05</span>
+              <span class="acc-icon">🚗</span>
+              <span class="acc-title">Leasing (Sewa Guna Usaha)</span>
+              <span class="acc-arrow">+</span>
+            </button>
+            <div class="accordion-body">
+              <p><a class="backlink" data-term="Leasing">Leasing</a> (sewa guna usaha) adalah <strong>pembiayaan barang modal atau aset</strong> oleh perusahaan pembiayaan (<a class="backlink" data-term="Lessor">lessor</a>) kepada pengguna (<a class="backlink" data-term="Lessee">lessee</a>) <strong>dengan cicilan berkala</strong>. Ini memungkinkan penggunaan barang tanpa modal besar di awal.</p>
+              <p>Di akhir kontrak, lessee biasanya memiliki opsi <strong>membeli, memperpanjang, atau mengembalikan aset</strong>.</p>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-head">
+              <span class="acc-tag">06</span>
+              <span class="acc-icon">📱</span>
+              <span class="acc-title">Financial Technology (Fintech)</span>
+              <span class="acc-arrow">+</span>
+            </button>
+            <div class="accordion-body">
+              <p><a class="backlink" data-term="Fintech">Fintech</a> (<em>financial technology</em>) adalah <strong>inovasi di industri jasa keuangan yang memanfaatkan teknologi digital</strong> untuk membuat layanan keuangan lebih praktis, efisien, dan inklusif. Fintech memungkinkan transaksi seperti pembayaran, pinjaman (<a class="backlink" data-term="P2P Lending">P2P lending</a>), investasi, dan manajemen keuangan dilakukan melalui aplikasi, tanpa perlu tatap muka fisik.</p>
+              <p><strong>Jenis-jenis Fintech:</strong></p>
+              <ul class="styled-list">
+                <li><strong>Pembayaran / Dompet Digital:</strong> GoPay, OVO, Dana, Flip</li>
+                <li><strong>Pinjaman Online:</strong> Modalku, Amartha, Kredit Pintar, JULO</li>
+                <li><strong>Manajemen Investasi:</strong> Bibit, Cermati, CekAja</li>
+                <li><strong><a class="backlink" data-term="Crowdfunding">Crowdfunding</a> (Patungan Dana):</strong> Kitabisa</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <button class="accordion-head">
+              <span class="acc-tag">07</span>
+              <span class="acc-icon">👴</span>
+              <span class="acc-title">Dana Pensiun</span>
+              <span class="acc-arrow">+</span>
+            </button>
+            <div class="accordion-body">
+              <p><a class="backlink" data-term="Dana Pensiun">Dana Pensiun</a> adalah <strong>badan hukum yang mengelola dan menjalankan program yang menjanjikan manfaat pensiun</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <strong>Cara mudah membedakan bank vs IKNB:</strong> Bank menerima simpanan dan memberi kredit. IKNB memiliki fungsi yang lebih spesifik, seperti asuransi untuk perlindungan risiko, pegadaian untuk pinjaman cepat dengan jaminan, dan seterusnya.
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="goPage('ojk-lps')">Lanjut ke OJK & LPS →</button>
+        <button class="btn" onclick="goPage('syariah')">← Kembali</button>
+      </div>
+    </section>
+
+    <!-- ============ OJK & LPS ============ -->
+    <section class="page" id="page-ojk-lps">
+      <div class="breadcrumb">Modul 08 <span class="sep">/</span> OJK & LPS</div>
+      <h1 class="page-title">Pengawas &amp; <span class="accent">Penjamin</span></h1>
+      <p class="page-desc">Dua lembaga ini memastikan industri keuangan Indonesia berjalan tertib dan melindungi uang masyarakat.</p>
+
+      <div class="content-block">
+        <h2 class="block-title">Otoritas Jasa Keuangan (OJK)</h2>
+        <p class="block-text"><a class="backlink" data-term="OJK">OJK</a> adalah lembaga yang berfungsi menyelenggarakan sistem <strong>pengaturan dan pengawasan</strong> yang terintegrasi terhadap keseluruhan kegiatan di dalam sektor jasa keuangan.</p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-num">1</div>
+            <div class="feature-content">
+              <h4>Tujuan OJK</h4>
+              <p>OJK dibentuk dengan tujuan agar keseluruhan kegiatan di dalam sektor jasa keuangan:</p>
+              <ul class="styled-list">
+                <li>Terselenggara secara <strong>teratur, adil, transparan, dan akuntabel</strong></li>
+                <li>Mampu mewujudkan sistem keuangan yang <strong>tumbuh secara berkelanjutan dan stabil</strong></li>
+                <li>Mampu melindungi <strong>kepentingan konsumen dan masyarakat</strong></li>
+              </ul>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">2</div>
+            <div class="feature-content">
+              <h4>Fungsi OJK</h4>
+              <p>Otoritas Jasa Keuangan (OJK) berfungsi:</p>
+              <ul class="styled-list">
+                <li>Menyelenggarakan sistem <strong>pengaturan dan pengawasan</strong> yang terintegrasi terhadap keseluruhan kegiatan di sektor jasa keuangan</li>
+                <li><strong>Memelihara Stabilitas Sistem Keuangan</strong> secara aktif sesuai dengan kewenangannya</li>
+                <li>Memberikan <strong>pelindungan terhadap konsumen</strong> dan masyarakat</li>
+              </ul>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">3</div>
+            <div class="feature-content">
+              <h4>Tugas OJK</h4>
+              <p>OJK melaksanakan tugas pengaturan dan pengawasan terhadap:</p>
+              <ul class="styled-list">
+                <li>Kegiatan jasa keuangan di sektor <strong>Perbankan</strong></li>
+                <li>Kegiatan jasa keuangan di sektor <strong>Pasar Modal, Keuangan Derivatif, dan Bursa Karbon</strong></li>
+                <li>Kegiatan jasa keuangan di sektor <strong>Perasuransian, Penjaminan, dan Dana Pensiun</strong></li>
+                <li>Kegiatan jasa keuangan di sektor <strong>Lembaga Pembiayaan, Modal Ventura, Lembaga Keuangan Mikro, dan IJK Lainnya</strong></li>
+                <li>Kegiatan di sektor <strong>ITSK serta Aset Keuangan Digital dan Aset Kripto</strong></li>
+                <li><strong>Perilaku pelaku usaha jasa keuangan</strong> serta pelaksanaan Edukasi dan Pelindungan Konsumen</li>
+                <li><strong>Sektor keuangan secara terintegrasi</strong> serta melakukan asesmen dampak sistemik Konglomerasi Keuangan</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-block">
+        <h2 class="block-title">Lembaga Penjamin Simpanan (LPS)</h2>
+        <p class="block-text"><a class="backlink" data-term="LPS">LPS</a> lahir dari <strong>krisis moneter tahun 1998</strong>. Saat itu, sebanyak <strong>16 bank dilikuidasi</strong> oleh pemerintah, dan kondisi tersebut membuat <strong>kepercayaan masyarakat terhadap industri perbankan menurun drastis</strong>.</p>
+
+        <p class="block-text">Untuk mengatasi krisis kepercayaan dan mencegah keruntuhan sistem perbankan, pemerintah Indonesia mengambil dua langkah penting yang menjadi cikal bakal lahirnya LPS:</p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-num">A</div>
+            <div class="feature-content">
+              <h4>Kebijakan <em><a class="backlink" data-term="Blanket Guarantee">Blanket Guarantee</a></em></h4>
+              <p>Pemerintah mengeluarkan kebijakan <a class="backlink" data-term="Blanket Guarantee">blanket guarantee</a>, yaitu kebijakan untuk <strong>menjamin seluruh kewajiban pembayaran bank</strong> termasuk simpanan masyarakat. Kebijakan ini ditetapkan melalui:</p>
+              <ul class="styled-list">
+                <li><strong>Keputusan Presiden Nomor 26 Tahun 1998</strong><br>tentang Jaminan Terhadap Kewajiban Pembayaran <a class="backlink" data-term="Bank Umum">Bank Umum</a></li>
+                <li><strong>Keputusan Presiden Nomor 193 Tahun 1998</strong><br>tentang Jaminan Terhadap Kewajiban Pembayaran <a class="backlink" data-term="BPR">Bank Perkreditan Rakyat</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">B</div>
+            <div class="feature-content">
+              <h4>Dampak Blanket Guarantee</h4>
+              <p>Kebijakan ini memiliki dua sisi dampak yang berlawanan:</p>
+              <div class="impact-split">
+                <div class="impact-box positive">
+                  <div class="impact-label">✓ Dampak Positif</div>
+                  <p>Berhasil menumbuhkan kembali <strong>kepercayaan masyarakat</strong> terhadap industri perbankan nasional.</p>
+                </div>
+                <div class="impact-box negative">
+                  <div class="impact-label">✕ Dampak Negatif</div>
+                  <p><strong>Membebani anggaran negara</strong> dan berpotensi menimbulkan <em>moral hazard</em>, yaitu bank menjadi kurang berhati-hati karena merasa selalu dijamin.</p>
+                </div>
+              </div>
+              <p style="margin-top:14px">Untuk mengatasi sisi negatif tersebut, dibentuklah <strong>Lembaga Penjamin Simpanan (LPS)</strong> yang menjamin simpanan nasabah secara terbatas dan terukur.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <strong>Dari "menjamin semua" menjadi "menjamin sesuai aturan":</strong> LPS hadir sebagai solusi yang lebih sehat, yaitu tetap melindungi nasabah tetapi dengan batas jaminan tertentu agar bank tetap berhati-hati dalam mengelola dananya.
+        </div>
+      </div>
+
+      <div class="content-block">
+        <h2 class="block-title">Lima Tugas Utama LPS</h2>
+        <p class="block-text">Setelah dibentuk, LPS memiliki lima tugas utama untuk melindungi nasabah dan menjaga stabilitas sistem keuangan Indonesia:</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-num">1</div>
+            <div class="feature-content">
+              <h4>Menjamin Simpanan Nasabah</h4>
+              <p>Jika sebuah bank gagal/bangkrut, simpanan nasabah dijamin sampai batas tertentu oleh LPS.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">2</div>
+            <div class="feature-content">
+              <h4>Menjamin Polis Asuransi</h4>
+              <p>LPS juga turut menjamin <a class="backlink" data-term="Polis">polis</a> nasabah perusahaan <a class="backlink" data-term="Asuransi">asuransi</a>.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">3</div>
+            <div class="feature-content">
+              <h4>Memelihara Stabilitas Perbankan</h4>
+              <p>Turut aktif menjaga sistem perbankan tetap stabil sesuai kewenangannya.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">4</div>
+            <div class="feature-content">
+              <h4>Melakukan Resolusi Bank</h4>
+              <p>Menangani bank yang bermasalah agar tidak menimbulkan dampak sistemik ke perekonomian.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-num">5</div>
+            <div class="feature-content">
+              <h4>Menyelesaikan Masalah Perusahaan Asuransi</h4>
+              <p>Menangani perusahaan <a class="backlink" data-term="Asuransi">asuransi</a> (konvensional & syariah) yang dicabut izinnya oleh <a class="backlink" data-term="OJK">OJK</a>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-callout">
+          <strong>Selamat!</strong> Kamu telah menyelesaikan semua modul. Saatnya menguji pemahaman dengan kuis interaktif. 🎉
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="goPage('quiz')">Mulai Kuis →</button>
+        <button class="btn" onclick="goPage('iknb')">← Kembali</button>
+      </div>
+    </section>
+
+    <!-- ============ QUIZ ============ -->
+    <section class="page" id="page-quiz">
+      <div class="breadcrumb">Latihan <span class="sep">/</span> Kuis Interaktif</div>
+      <h1 class="page-title">Uji <span class="accent">Pemahamanmu</span></h1>
+      <p class="page-desc">Pilih paket kuis di bawah ini. Kamu bisa mengerjakan kuis per materi, atau langsung mencoba kuis gabungan yang mencakup semua materi.</p>
+
+      <!-- QUIZ SELECTOR -->
+      <div id="quizSelector">
+        <h2 class="subsection-title" style="margin-top:0">Kuis Per Materi</h2>
+        <div class="quiz-pick-grid" id="quizPickGrid"></div>
+
+        <h2 class="subsection-title">Kuis Gabungan</h2>
+        <div class="quiz-pick-grid" id="quizPickFinal"></div>
+      </div>
+
+      <!-- QUIZ PLAYER -->
+      <div class="quiz-card" id="quizCard" style="display:none">
+        <button class="quiz-back" onclick="exitQuiz()">← Pilih kuis lain</button>
+        <div class="quiz-topic" id="quizTopic">Kuis</div>
+        <div class="quiz-progress">
+          <span id="quizCounter">Soal 1 dari 10</span>
+          <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgress" style="width:10%"></div></div>
+          <span id="quizScore">Skor: 0</span>
+        </div>
+        <div class="quiz-question" id="quizQuestion">Memuat...</div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+        <div class="quiz-nav">
+          <button class="btn" id="quizPrev" onclick="prevQuiz()">← Sebelumnya</button>
+          <button class="btn btn-primary" id="quizNext" onclick="nextQuiz()">Selanjutnya →</button>
+        </div>
+      </div>
+
+      <div class="quiz-card" id="quizResultCard" style="display:none">
+        <div class="quiz-result">
+          <div class="quiz-result-label">Hasil Akhir</div>
+          <div class="quiz-result-num" id="resultNum">0</div>
+          <div class="quiz-result-label" id="resultDenom">dari 10</div>
+          <div class="quiz-result-msg" id="resultMsg">.</div>
+          <div class="quiz-result-sub" id="resultSub">.</div>
+          <div class="cta-row" style="justify-content:center">
+            <button class="btn btn-primary" onclick="restartQuiz()">Ulangi Kuis Ini</button>
+            <button class="btn" onclick="exitQuiz()">Pilih Kuis Lain</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GLOSSARY ============ -->
+    <section class="page" id="page-glossary">
+      <div class="breadcrumb">Referensi <span class="sep">/</span> Glosarium</div>
+      <h1 class="page-title"><span class="accent">Glosarium</span> Istilah</h1>
+      <p class="page-desc">Kumpulan istilah penting dalam materi Bank & IKNB. Gunakan kolom pencarian untuk menemukan istilah dengan cepat.</p>
+
+      <div class="glossary-search">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="glossarySearch" placeholder="Cari istilah... (contoh: deposito, OJK, fintech)" />
+      </div>
+
+      <div class="glossary-grid" id="glossaryGrid"></div>
+    </section>
+
+    <div class="footer">
+      <span>EkonomiKU © 2026 · Materi IPS SMA</span>
+      <span>Dibuat untuk pembelajaran interaktif</span>
+    </div>
+
+  </main>
+  </div>
+</div>
+
+<script>
+  // ============ NAVIGATION ============
+  const visitedPages = new Set(['home']);
+  const totalModules = 8;
+
+  function goPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const navItem = document.querySelector(`[data-page="${id}"]`);
+    if (navItem) navItem.classList.add('active');
+
+    visitedPages.add(id);
+    updateProgress();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+
+    // reset quiz to selector view whenever quiz page is opened fresh
+    if (id === 'quiz' && typeof exitQuiz === 'function') {
+      exitQuiz();
+    }
+
+    // close mobile menu
+    if (typeof closeSidebar === 'function') closeSidebar();
+  }
+
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => goPage(item.dataset.page));
+  });
+
+  function updateProgress() {
+    const modulePages = ['pengantar','bank-sentral','bank-umum','bpr','kepemilikan','syariah','iknb','ojk-lps'];
+    const visitedModules = modulePages.filter(p => visitedPages.has(p)).length;
+    const pct = Math.round((visitedModules / totalModules) * 100);
+    document.getElementById('progressValue').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+  }
+
+  // ============ MOBILE MENU ============
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  function openSidebar() {
+    sidebar.classList.add('open');
+    overlay.classList.add('active');
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('active');
+  }
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+  overlay.addEventListener('click', closeSidebar);
+
+  // ============ GLOBAL SEARCH ============
+  const pageIndex = [
+    { id: 'home', title: 'Beranda', type: 'Halaman' },
+    { id: 'petunjuk', title: 'Petunjuk Penggunaan', type: 'Panduan' },
+    { id: 'pengantar', title: 'Pengantar Bank', type: 'Modul 01' },
+    { id: 'bank-sentral', title: 'Bank Sentral', type: 'Modul 02' },
+    { id: 'bank-umum', title: 'Bank Umum', type: 'Modul 03' },
+    { id: 'bpr', title: 'Bank Perkreditan Rakyat (BPR)', type: 'Modul 04' },
+    { id: 'kepemilikan', title: 'Kepemilikan Bank', type: 'Modul 05' },
+    { id: 'syariah', title: 'Konvensional vs Syariah', type: 'Modul 06' },
+    { id: 'iknb', title: 'Industri Keuangan Non Bank (IKNB)', type: 'Modul 07' },
+    { id: 'ojk-lps', title: 'OJK & LPS', type: 'Modul 08' },
+    { id: 'quiz', title: 'Kuis Interaktif', type: 'Latihan' },
+    { id: 'glossary', title: 'Glosarium', type: 'Referensi' }
+  ];
+
+  const searchInput = document.getElementById('globalSearch');
+  const searchResultsEl = document.getElementById('searchResults');
+
+  function runGlobalSearch() {
+    const q = searchInput.value.toLowerCase().trim();
+    if (!q) { searchResultsEl.classList.remove('show'); return; }
+
+    const results = [];
+    // match pages
+    pageIndex.forEach(p => {
+      if (p.title.toLowerCase().includes(q)) {
+        results.push({ kind: 'page', id: p.id, title: p.title, sub: p.type });
+      }
+    });
+    // match glossary terms (glossaryData defined later in script)
+    if (typeof glossaryData !== 'undefined') {
+      glossaryData.forEach(g => {
+        if (g.term.toLowerCase().includes(q)) {
+          results.push({ kind: 'term', id: g.term, title: g.term, sub: 'Istilah Glosarium' });
+        }
+      });
+    }
+
+    if (results.length === 0) {
+      searchResultsEl.innerHTML = '<div class="search-result-empty">Tidak ada hasil untuk "' + searchInput.value + '"</div>';
+      searchResultsEl.classList.add('show');
+      return;
+    }
+
+    searchResultsEl.innerHTML = results.slice(0, 8).map(r =>
+      `<div class="search-result-item" data-kind="${r.kind}" data-id="${r.id.replace(/"/g,'&quot;')}">
+        <div class="sr-title">${r.title}</div>
+        <div class="sr-type">${r.sub}</div>
+      </div>`
+    ).join('');
+    searchResultsEl.classList.add('show');
+
+    searchResultsEl.querySelectorAll('.search-result-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const kind = item.dataset.kind;
+        const id = item.dataset.id;
+        searchInput.value = '';
+        searchResultsEl.classList.remove('show');
+        if (kind === 'page') {
+          goPage(id);
+        } else {
+          // glossary term: navigate and highlight
+          goPage('glossary');
+          const gs = document.getElementById('glossarySearch');
+          if (gs) gs.value = id;
+          renderGlossary(id, id);
+        }
+      });
+    });
+  }
+
+  searchInput.addEventListener('input', runGlobalSearch);
+  searchInput.addEventListener('focus', runGlobalSearch);
+  // close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.topbar-search') && !e.target.closest('.search-results')) {
+      searchResultsEl.classList.remove('show');
+    }
+  });
+
+  // ============ TABS ============
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const parent = tab.closest('.content-block');
+      parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ============ ACCORDION ============
+  document.querySelectorAll('.accordion-head').forEach(head => {
+    head.addEventListener('click', () => {
+      const item = head.closest('.accordion-item');
+      item.classList.toggle('open');
+    });
+  });
+
+  // ============ QUIZ (multi-paket) ============
+  const quizPackages = {
+    "bank-sentral": {
+      title: "Bank Sentral",
+      icon: "🏛️",
+      questions: [
+        {
+          q: "Berdasarkan UU No. 13 Tahun 1999, tujuan Bank Indonesia adalah...",
+          options: [
+            "Mencari keuntungan sebesar-besarnya",
+            "Mencapai dan memelihara kestabilan nilai rupiah",
+            "Menyalurkan kredit ke seluruh masyarakat",
+            "Mengatur perdagangan saham di pasar modal"
+          ],
+          correct: 1,
+          explain: "Sesuai UU No. 13 Tahun 1999, tujuan BI adalah mencapai dan memelihara kestabilan nilai rupiah."
+        },
+        {
+          q: "Bank sentral berfungsi sebagai bank sirkulasi dan sebagai induk dari bank-bank lain, yang disebut juga...",
+          options: ["lender of last resort", "banker of banks", "market maker", "clearing house"],
+          correct: 1,
+          explain: "Bank sentral disebut banker of banks karena menjadi induk dari bank-bank lain."
+        },
+        {
+          q: "Lembaga yang memiliki hak monopoli untuk mengedarkan uang kertas dan logam sebagai alat pembayaran yang sah adalah...",
+          options: ["Bank Umum", "Bank Sentral", "BPR", "OJK"],
+          correct: 1,
+          explain: "Bank sentral memiliki hak monopoli untuk mengedarkan uang kertas dan logam sebagai alat pembayaran yang sah."
+        },
+        {
+          q: "Kebijakan pengendalian jumlah uang yang beredar agar sesuai dengan kebutuhan sistem perekonomian disebut kebijakan...",
+          options: ["fiskal", "moneter", "anggaran", "perdagangan"],
+          correct: 1,
+          explain: "Kebijakan pengendalian jumlah uang yang beredar disebut kebijakan moneter, dan ini adalah salah satu tugas BI."
+        },
+        {
+          q: "Berikut yang termasuk tugas Bank Indonesia, kecuali...",
+          options: [
+            "Mengeluarkan alat pembayaran yang sah",
+            "Menetapkan dan melaksanakan kebijakan moneter",
+            "Mengatur dan menjaga kelancaran sistem pembayaran",
+            "Menjual saham dan obligasi kepada investor"
+          ],
+          correct: 3,
+          explain: "Menjual saham dan obligasi bukan tugas BI. Tugas BI adalah mengeluarkan alat pembayaran, kebijakan moneter, dan menjaga sistem pembayaran."
+        }
+      ]
+    },
+    "bank-umum": {
+      title: "Bank Umum",
+      icon: "💳",
+      questions: [
+        {
+          q: "Badan usaha yang menghimpun dana dari masyarakat dalam bentuk simpanan dan menyalurkannya kembali kepada masyarakat disebut...",
+          options: ["Bank Sentral", "Bank Umum", "Pegadaian", "Koperasi"],
+          correct: 1,
+          explain: "Bank umum menghimpun dana dari masyarakat dalam bentuk simpanan dan menyalurkannya kembali dalam rangka meningkatkan taraf hidup rakyat banyak."
+        },
+        {
+          q: "Produk simpanan di bank yang penyetoran dan penarikannya dapat dilakukan kapan saja disebut...",
+          options: ["Deposito", "Giro", "Tabungan", "Obligasi"],
+          correct: 2,
+          explain: "Tabungan (Saving Deposit) adalah produk simpanan yang penyetoran dan penarikannya dapat dilakukan kapan saja."
+        },
+        {
+          q: "Produk simpanan yang penyetoran maupun penarikannya hanya dapat dilakukan pada waktu tertentu saja adalah...",
+          options: ["Tabungan", "Giro", "Deposito", "Cek"],
+          correct: 2,
+          explain: "Deposito adalah produk simpanan yang penarikannya hanya dapat dilakukan pada waktu tertentu saja."
+        },
+        {
+          q: "Surat berharga di mana penerimanya bisa langsung menguangkannya di bank disebut...",
+          options: ["Bilyet giro", "Cek", "Saham", "Polis"],
+          correct: 1,
+          explain: "Cek adalah surat berharga yang penerimanya bisa langsung menguangkannya di bank."
+        },
+        {
+          q: "Bilyet giro berbeda dengan cek karena bilyet giro...",
+          options: [
+            "bisa langsung diuangkan di bank",
+            "tidak bisa diuangkan di bank, melainkan disetorkan ke rekening",
+            "hanya berlaku untuk transaksi kecil",
+            "tidak memiliki nilai nominal"
+          ],
+          correct: 1,
+          explain: "Bilyet giro tidak bisa diuangkan langsung di bank, melainkan harus disetorkan ke dalam rekening."
+        },
+        {
+          q: "Kredit yang digunakan untuk membeli rumah dengan jaminan berupa rumah disebut...",
+          options: ["Kredit Modal Kerja", "Kredit Investasi", "Kredit Pemilikan Rumah", "Kartu Kredit"],
+          correct: 2,
+          explain: "Kredit Pemilikan Rumah (KPR) digunakan untuk membeli rumah atau kebutuhan konsumtif lain dengan jaminan/agunan berupa rumah."
+        },
+        {
+          q: "Kredit yang diberikan untuk membiayai pembangunan gedung, pembelian mesin, dan alat produksi disebut...",
+          options: ["Kredit Investasi", "Kredit Modal Kerja", "KPR", "Kartu Kredit"],
+          correct: 0,
+          explain: "Kredit Investasi digunakan untuk membiayai pembangunan/perluasan gedung, pabrik, pembelian mesin dan alat produksi."
+        },
+        {
+          q: "Alat pembayaran non tunai di mana penerbit memberikan pinjaman uang kepada konsumen, bukan mengambil dari rekening, adalah...",
+          options: ["Kartu Debit", "Kartu Kredit", "Cek", "Giro"],
+          correct: 1,
+          explain: "Kartu kredit adalah alat pembayaran non tunai di mana penerbit memberikan pinjaman uang kepada konsumen."
+        }
+      ]
+    },
+    "bpr": {
+      title: "BPR",
+      icon: "🏪",
+      questions: [
+        {
+          q: "BPR menerima simpanan masyarakat hanya dalam bentuk...",
+          options: [
+            "Giro dan tabungan",
+            "Deposito berjangka dan tabungan",
+            "Saham dan obligasi",
+            "Valuta asing"
+          ],
+          correct: 1,
+          explain: "BPR hanya menerima simpanan dalam bentuk deposito berjangka, tabungan, atau bentuk lain yang sejenis."
+        },
+        {
+          q: "Berikut adalah kegiatan yang boleh dijalankan BPR, kecuali...",
+          options: [
+            "Menghimpun dana dalam bentuk tabungan dan deposito",
+            "Menyalurkan dana dalam bentuk kredit",
+            "Menerima simpanan dalam bentuk giro",
+            "Menempatkan dana dalam bentuk SBI"
+          ],
+          correct: 2,
+          explain: "BPR tidak boleh menerima simpanan dalam bentuk giro. Itu termasuk kegiatan yang tidak boleh dijalankan BPR."
+        },
+        {
+          q: "Berikut termasuk bentuk usaha yang TIDAK boleh dijalankan oleh BPR adalah...",
+          options: [
+            "Menyalurkan kredit",
+            "Penyertaan modal dan asuransi",
+            "Menerima tabungan",
+            "Menyediakan pembiayaan bagi hasil"
+          ],
+          correct: 1,
+          explain: "BPR tidak boleh melakukan penyertaan modal dan tidak boleh menjalankan usaha asuransi."
+        },
+        {
+          q: "BPR boleh menempatkan dananya dalam bentuk berikut, yaitu...",
+          options: [
+            "SBI, deposito, atau tabungan pada bank lain",
+            "Giro pada bank lain",
+            "Saham perusahaan",
+            "Valuta asing"
+          ],
+          correct: 0,
+          explain: "BPR boleh menempatkan dana dalam bentuk SBI, deposito, dan atau tabungan pada bank lain."
+        },
+        {
+          q: "Selain menghimpun dan menyalurkan dana, BPR juga dapat menyediakan pembiayaan bagi nasabah berdasarkan prinsip...",
+          options: ["bunga tetap", "bagi hasil", "denda", "valuta asing"],
+          correct: 1,
+          explain: "BPR menyediakan pembiayaan bagi nasabah berdasarkan prinsip bagi hasil."
+        }
+      ]
+    },
+    "kepemilikan": {
+      title: "Kepemilikan Bank",
+      icon: "🌐",
+      questions: [
+        {
+          q: "Bank Mandiri, BRI, BNI, dan BTN termasuk dalam kategori bank...",
+          options: [
+            "milik pemerintah pusat",
+            "milik pemerintah daerah",
+            "swasta nasional",
+            "asing"
+          ],
+          correct: 0,
+          explain: "Bank Mandiri, BRI, BNI, BTN, dan BSI adalah bank milik pemerintah pusat."
+        },
+        {
+          q: "Bank DKI, Bank Jatim, dan Bank Nagari termasuk dalam kategori bank...",
+          options: [
+            "milik pemerintah pusat",
+            "milik pemerintah daerah",
+            "swasta nasional",
+            "asing"
+          ],
+          correct: 1,
+          explain: "Bank DKI, Bank Jabar Banten, Bank Jatim, Bank Nagari, dan Bank Papua adalah bank milik pemerintah daerah."
+        },
+        {
+          q: "Bank Central Asia (BCA), CIMB Niaga, dan Bank Mega termasuk dalam kategori bank...",
+          options: [
+            "milik pemerintah pusat",
+            "milik pemerintah daerah",
+            "swasta",
+            "asing"
+          ],
+          correct: 2,
+          explain: "BCA, CIMB Niaga, Danamon, Permata, OCBC NISP, Mega, dan Panin adalah bank swasta."
+        },
+        {
+          q: "HSBC, Citibank, Maybank, dan Hana Bank termasuk dalam kategori bank...",
+          options: [
+            "milik pemerintah",
+            "swasta nasional",
+            "asing",
+            "perkreditan rakyat"
+          ],
+          correct: 2,
+          explain: "HSBC (Inggris/Hongkong), Citibank (AS), Maybank (Malaysia), dan Hana Bank (Korea) adalah bank asing."
+        },
+        {
+          q: "Maybank merupakan bank asing yang berasal dari negara...",
+          options: ["Korea", "Malaysia", "Amerika Serikat", "Inggris"],
+          correct: 1,
+          explain: "Maybank adalah bank asing yang berasal dari Malaysia."
+        }
+      ]
+    },
+    "syariah": {
+      title: "Konvensional vs Syariah",
+      icon: "☪",
+      questions: [
+        {
+          q: "Bank syariah hanya berinvestasi pada usaha yang...",
+          options: ["halal", "halal atau haram", "menguntungkan saja", "berskala besar"],
+          correct: 0,
+          explain: "Bank syariah hanya berinvestasi pada usaha yang halal, sedangkan bank konvensional berinvestasi pada usaha halal maupun haram."
+        },
+        {
+          q: "Sistem yang digunakan bank syariah dalam menjalankan kegiatannya adalah...",
+          options: [
+            "sistem bunga",
+            "sistem bagi hasil, margin keuntungan, dan fee",
+            "sistem denda",
+            "sistem komisi tetap"
+          ],
+          correct: 1,
+          explain: "Bank syariah berdasarkan sistem bagi hasil, margin keuntungan, dan fee. Bank konvensional menggunakan sistem bunga."
+        },
+        {
+          q: "Pada bank konvensional, besaran bunga bersifat...",
+          options: ["berubah-ubah sesuai kinerja usaha", "tetap", "tidak ada", "ditentukan nasabah"],
+          correct: 1,
+          explain: "Pada bank konvensional besaran bunga bersifat tetap, sedangkan pada bank syariah besaran bagi hasil berubah-ubah sesuai kinerja usaha."
+        },
+        {
+          q: "Pola hubungan antara bank syariah dan nasabah adalah...",
+          options: ["debitur-kreditur", "kemitraan", "atasan-bawahan", "penjual-pembeli"],
+          correct: 1,
+          explain: "Pola hubungan bank syariah dan nasabah adalah kemitraan, sedangkan bank konvensional adalah debitur-kreditur."
+        },
+        {
+          q: "Lembaga yang mengawasi kegiatan bank syariah agar sesuai prinsip syariah adalah...",
+          options: [
+            "Dewan Pengawas Syariah (DPS)",
+            "Otoritas Jasa Keuangan",
+            "Lembaga Penjamin Simpanan",
+            "Bursa Efek Indonesia"
+          ],
+          correct: 0,
+          explain: "Pada bank syariah ada pengawasan syariah oleh Dewan Pengawas Syariah (DPS), sedangkan bank konvensional tidak ada."
+        },
+        {
+          q: "Orientasi bank syariah adalah profit dan falah oriented, yang berarti...",
+          options: [
+            "kebahagiaan dunia saja",
+            "kebahagiaan dunia dan akhirat, sejahtera lahir dan batin",
+            "keuntungan maksimal",
+            "kepuasan nasabah saja"
+          ],
+          correct: 1,
+          explain: "Bank syariah berorientasi profit dan falah, yaitu kebahagiaan dunia dan akhirat. Bank konvensional hanya profit oriented (kebahagiaan dunia saja)."
+        }
+      ]
+    },
+    "iknb": {
+      title: "IKNB",
+      icon: "📊",
+      questions: [
+        {
+          q: "Lembaga yang menyelenggarakan aktivitas keuangan berupa penghimpunan dana lalu menyalurkannya untuk investasi, tetapi bukan bank, disebut...",
+          options: ["Bank Umum", "IKNB", "Bank Sentral", "BPR"],
+          correct: 1,
+          explain: "IKNB (Industri Keuangan Non Bank) menghimpun dana dari masyarakat lalu menyalurkannya untuk kegiatan investasi serta menerbitkan surat berharga."
+        },
+        {
+          q: "Tempat bertemunya emiten dan investor melalui perdagangan saham dan obligasi disebut...",
+          options: ["Bank Sentral", "Pasar Modal", "Koperasi", "Pegadaian"],
+          correct: 1,
+          explain: "Pasar modal adalah tempat bertemunya pihak yang membutuhkan dana (emiten) dan pihak yang memiliki dana (investor) melalui perdagangan instrumen keuangan jangka panjang."
+        },
+        {
+          q: "Berlandaskan UU No. 25 Tahun 1992, badan usaha yang dimiliki dan dikelola anggota berdasarkan asas kekeluargaan adalah...",
+          options: ["Koperasi", "Asuransi", "Pegadaian", "Leasing"],
+          correct: 0,
+          explain: "Koperasi adalah badan usaha otonom yang dimiliki dan dikelola anggota secara sukarela berdasarkan asas kekeluargaan, berlandaskan UU No. 25 Tahun 1992."
+        },
+        {
+          q: "Dalam asuransi, nasabah membayar sejumlah uang yang disebut... untuk mendapatkan perlindungan finansial.",
+          options: ["premi", "polis", "bunga", "dividen"],
+          correct: 0,
+          explain: "Nasabah (tertanggung) membayar premi kepada perusahaan asuransi (penanggung) untuk mendapatkan perlindungan finansial."
+        },
+        {
+          q: "Lembaga keuangan non bank milik negara yang memberikan pinjaman cepat dengan jaminan barang adalah...",
+          options: ["Pegadaian", "Koperasi", "Pasar Modal", "Dana Pensiun"],
+          correct: 0,
+          explain: "Pegadaian adalah lembaga keuangan non bank milik negara (BUMN/anak usaha BRI) yang menyediakan pinjaman cepat dengan jaminan barang."
+        },
+        {
+          q: "Dalam leasing, pihak yang menyediakan pembiayaan barang modal disebut...",
+          options: ["lessee", "lessor", "emiten", "tertanggung"],
+          correct: 1,
+          explain: "Lessor adalah perusahaan pembiayaan yang menyediakan barang modal, sedangkan lessee adalah pengguna/penerima."
+        },
+        {
+          q: "GoPay, OVO, dan Dana merupakan contoh fintech jenis...",
+          options: [
+            "pinjaman online",
+            "pembayaran/dompet digital",
+            "manajemen investasi",
+            "crowdfunding"
+          ],
+          correct: 1,
+          explain: "GoPay, OVO, Dana, dan Flip adalah contoh fintech jenis pembayaran/dompet digital."
+        },
+        {
+          q: "Kitabisa merupakan contoh fintech jenis...",
+          options: [
+            "dompet digital",
+            "pinjaman online",
+            "crowdfunding (patungan dana)",
+            "manajemen investasi"
+          ],
+          correct: 2,
+          explain: "Kitabisa adalah contoh fintech jenis crowdfunding atau patungan dana."
+        },
+        {
+          q: "Badan hukum yang mengelola dan menjalankan program yang menjanjikan manfaat pensiun disebut...",
+          options: ["Dana Pensiun", "Asuransi", "Koperasi", "Pegadaian"],
+          correct: 0,
+          explain: "Dana Pensiun adalah badan hukum yang mengelola dan menjalankan program yang menjanjikan manfaat pensiun."
+        }
+      ]
+    },
+    "ojk-lps": {
+      title: "OJK & LPS",
+      icon: "⚖️",
+      questions: [
+        {
+          q: "Lembaga yang menyelenggarakan sistem pengaturan dan pengawasan terintegrasi terhadap seluruh sektor jasa keuangan adalah...",
+          options: ["LPS", "Bank Indonesia", "OJK", "Kementerian Keuangan"],
+          correct: 2,
+          explain: "OJK (Otoritas Jasa Keuangan) menyelenggarakan sistem pengaturan dan pengawasan terintegrasi terhadap keseluruhan kegiatan di sektor jasa keuangan."
+        },
+        {
+          q: "Berikut termasuk fungsi OJK, kecuali...",
+          options: [
+            "Menyelenggarakan pengaturan dan pengawasan terintegrasi",
+            "Memelihara stabilitas sistem keuangan",
+            "Memberikan pelindungan terhadap konsumen dan masyarakat",
+            "Mencetak dan mengedarkan uang rupiah"
+          ],
+          correct: 3,
+          explain: "Mencetak dan mengedarkan uang adalah tugas Bank Indonesia, bukan OJK. Fungsi OJK meliputi pengaturan, pengawasan, menjaga stabilitas, dan pelindungan konsumen."
+        },
+        {
+          q: "LPS lahir akibat krisis moneter yang terjadi pada tahun...",
+          options: ["1965", "1998", "2008", "2020"],
+          correct: 1,
+          explain: "LPS berawal dari krisis moneter tahun 1998 yang menyebabkan dilikuidasinya 16 bank dan menurunnya kepercayaan masyarakat."
+        },
+        {
+          q: "Kebijakan pemerintah untuk menjamin seluruh kewajiban pembayaran bank termasuk simpanan masyarakat disebut...",
+          options: ["bailout", "blanket guarantee", "moral hazard", "likuidasi"],
+          correct: 1,
+          explain: "Blanket guarantee adalah kebijakan pemerintah untuk menjamin seluruh kewajiban pembayaran bank, ditetapkan melalui Keppres No. 26 dan No. 193 Tahun 1998."
+        },
+        {
+          q: "Kebijakan blanket guarantee ditetapkan melalui Keputusan Presiden Nomor...",
+          options: [
+            "26 dan 193 Tahun 1998",
+            "10 Tahun 1998",
+            "21 Tahun 2011",
+            "13 Tahun 1999"
+          ],
+          correct: 0,
+          explain: "Blanket guarantee ditetapkan melalui Keppres No. 26 Tahun 1998 (Bank Umum) dan Keppres No. 193 Tahun 1998 (BPR)."
+        },
+        {
+          q: "Berikut termasuk fungsi LPS, kecuali...",
+          options: [
+            "Menjamin simpanan nasabah penyimpan",
+            "Menjamin polis asuransi",
+            "Melakukan resolusi bank",
+            "Menetapkan kebijakan moneter negara"
+          ],
+          correct: 3,
+          explain: "Menetapkan kebijakan moneter adalah tugas Bank Indonesia. Fungsi LPS antara lain menjamin simpanan, menjamin polis asuransi, dan melakukan resolusi bank."
+        },
+        {
+          q: "LPS turut menyelesaikan permasalahan perusahaan asuransi yang dicabut izin usahanya oleh...",
+          options: ["Bank Indonesia", "OJK", "Kementerian Keuangan", "DPS"],
+          correct: 1,
+          explain: "LPS melakukan penyelesaian permasalahan perusahaan asuransi dan asuransi syariah yang dicabut izin usahanya oleh OJK."
+        }
+      ]
+    }
+  };
+
+  // Kuis gabungan (15 soal lintas materi)
+  const quizFinal = {
+    title: "Kuis Gabungan (Semua Materi)",
+    icon: "🏆",
+    questions: [
+      { q: "Berdasarkan UU No. 13 Tahun 1999, tujuan Bank Indonesia adalah...", options: ["Mencari keuntungan maksimal","Mencapai dan memelihara kestabilan nilai rupiah","Menyalurkan kredit ke masyarakat","Mengatur pasar modal"], correct: 1, explain: "Tujuan BI adalah mencapai dan memelihara kestabilan nilai rupiah." },
+      { q: "Bank sentral disebut sebagai induk dari bank-bank lain, atau...", options: ["banker of banks","market maker","clearing house","lender"], correct: 0, explain: "Bank sentral disebut banker of banks." },
+      { q: "Produk simpanan yang penyetoran dan penarikannya dapat dilakukan kapan saja adalah...", options: ["Deposito","Giro","Tabungan","Obligasi"], correct: 2, explain: "Tabungan dapat disetor dan ditarik kapan saja." },
+      { q: "Surat berharga yang bisa langsung diuangkan di bank adalah...", options: ["Bilyet giro","Cek","Saham","Polis"], correct: 1, explain: "Cek bisa langsung diuangkan, bilyet giro harus disetor ke rekening." },
+      { q: "Kredit untuk membeli rumah dengan jaminan rumah disebut...", options: ["Kredit Modal Kerja","KPR","Kredit Investasi","Kartu Kredit"], correct: 1, explain: "KPR digunakan untuk membeli rumah dengan agunan berupa rumah." },
+      { q: "Kegiatan yang TIDAK boleh dilakukan BPR adalah...", options: ["Menerima tabungan","Menerima deposito","Menerima giro","Menyalurkan kredit"], correct: 2, explain: "BPR tidak boleh menerima simpanan dalam bentuk giro." },
+      { q: "Bank Mandiri, BRI, dan BNI termasuk bank...", options: ["milik pemerintah pusat","milik pemerintah daerah","swasta","asing"], correct: 0, explain: "Mereka adalah bank milik pemerintah pusat (BUMN)." },
+      { q: "HSBC dan Citibank termasuk kategori bank...", options: ["pemerintah","swasta nasional","asing","BPR"], correct: 2, explain: "HSBC dan Citibank adalah bank asing." },
+      { q: "Sistem yang digunakan bank syariah adalah...", options: ["bunga","bagi hasil, margin, dan fee","denda","komisi tetap"], correct: 1, explain: "Bank syariah menggunakan sistem bagi hasil, margin keuntungan, dan fee." },
+      { q: "Lembaga yang mengawasi bank syariah agar sesuai prinsip syariah adalah...", options: ["DPS","OJK","LPS","BEI"], correct: 0, explain: "Dewan Pengawas Syariah (DPS) mengawasi bank syariah." },
+      { q: "Tempat bertemunya emiten dan investor melalui perdagangan saham dan obligasi adalah...", options: ["Bank Sentral","Pasar Modal","Koperasi","Pegadaian"], correct: 1, explain: "Pasar modal mempertemukan emiten dan investor." },
+      { q: "Lembaga keuangan non bank yang memberi pinjaman cepat dengan jaminan barang adalah...", options: ["Pegadaian","Koperasi","Dana Pensiun","Pasar Modal"], correct: 0, explain: "Pegadaian memberi pinjaman dengan jaminan barang." },
+      { q: "Dalam leasing, pihak penyedia barang modal disebut...", options: ["lessee","lessor","emiten","investor"], correct: 1, explain: "Lessor adalah penyedia, lessee adalah pengguna." },
+      { q: "Lembaga yang mengatur dan mengawasi seluruh sektor jasa keuangan adalah...", options: ["LPS","Bank Indonesia","OJK","DPS"], correct: 2, explain: "OJK mengatur dan mengawasi seluruh sektor jasa keuangan." },
+      { q: "Kebijakan menjamin seluruh kewajiban pembayaran bank saat krisis 1998 disebut...", options: ["bailout","blanket guarantee","likuidasi","resolusi"], correct: 1, explain: "Blanket guarantee menjamin seluruh kewajiban pembayaran bank, ditetapkan lewat Keppres No. 26 & 193 Tahun 1998." }
+    ]
+  };
+
+  // ---- Quiz state ----
+  let activeQuiz = null;
+  let currentQ = 0;
+  let score = 0;
+  let answered = [];
+
+  function buildQuizSelector() {
+    const order = ["bank-sentral","bank-umum","bpr","kepemilikan","syariah","iknb","ojk-lps"];
+    const grid = document.getElementById('quizPickGrid');
+    grid.innerHTML = order.map((key, idx) => {
+      const p = quizPackages[key];
+      return `<button class="quiz-pick-card" onclick="startQuiz('${key}')">
+        <div class="quiz-pick-icon">${p.icon}</div>
+        <div class="quiz-pick-title">${p.title}</div>
+        <div class="quiz-pick-meta">📝 ${p.questions.length} soal</div>
+        <span class="quiz-pick-start">Mulai kuis</span>
+      </button>`;
+    }).join('');
+
+    const finalGrid = document.getElementById('quizPickFinal');
+    finalGrid.innerHTML = `<button class="quiz-pick-card final" onclick="startQuiz('final')">
+        <div class="quiz-pick-icon">${quizFinal.icon}</div>
+        <div class="quiz-pick-title">${quizFinal.title}</div>
+        <div class="quiz-pick-meta">📝 ${quizFinal.questions.length} soal · semua materi</div>
+        <span class="quiz-pick-start">Mulai kuis</span>
+      </button>`;
+  }
+
+  function startQuiz(key) {
+    activeQuiz = key === 'final' ? quizFinal : quizPackages[key];
+    currentQ = 0;
+    score = 0;
+    answered = new Array(activeQuiz.questions.length).fill(null);
+    document.getElementById('quizSelector').style.display = 'none';
+    document.getElementById('quizResultCard').style.display = 'none';
+    document.getElementById('quizCard').style.display = 'block';
+    document.getElementById('quizTopic').textContent = activeQuiz.title;
+    renderQuiz();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function exitQuiz() {
+    document.getElementById('quizCard').style.display = 'none';
+    document.getElementById('quizResultCard').style.display = 'none';
+    document.getElementById('quizSelector').style.display = 'block';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function renderQuiz() {
+    const qs = activeQuiz.questions;
+    const q = qs[currentQ];
+    document.getElementById('quizCounter').textContent = `Soal ${currentQ+1} dari ${qs.length}`;
+    document.getElementById('quizScore').textContent = `Skor: ${score}`;
+    document.getElementById('quizProgress').style.width = ((currentQ+1)/qs.length*100) + '%';
+    document.getElementById('quizQuestion').textContent = q.q;
+    const letters = ['A','B','C','D'];
+    const optionsEl = document.getElementById('quizOptions');
+    optionsEl.innerHTML = '';
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-option';
+      btn.innerHTML = `<span class="letter">${letters[i]}</span> ${opt}`;
+      btn.onclick = () => answerQuiz(i);
+      if (answered[currentQ] !== null) {
+        btn.disabled = true;
+        if (i === q.correct) btn.classList.add('correct');
+        if (i === answered[currentQ] && i !== q.correct) btn.classList.add('wrong');
+      }
+      optionsEl.appendChild(btn);
+    });
+
+    const fb = document.getElementById('quizFeedback');
+    if (answered[currentQ] !== null) {
+      const correct = answered[currentQ] === q.correct;
+      fb.className = 'quiz-feedback show ' + (correct ? 'correct' : 'wrong');
+      fb.innerHTML = (correct ? '✓ Benar! ' : '✗ Kurang tepat. ') + q.explain;
+    } else {
+      fb.className = 'quiz-feedback';
+      fb.innerHTML = '';
+    }
+
+    document.getElementById('quizPrev').disabled = currentQ === 0;
+    document.getElementById('quizPrev').style.opacity = currentQ === 0 ? 0.4 : 1;
+    document.getElementById('quizNext').textContent = currentQ === qs.length - 1 ? 'Lihat Hasil →' : 'Selanjutnya →';
+  }
+
+  function answerQuiz(i) {
+    if (answered[currentQ] !== null) return;
+    answered[currentQ] = i;
+    if (i === activeQuiz.questions[currentQ].correct) score++;
+    renderQuiz();
+  }
+
+  function nextQuiz() {
+    if (currentQ < activeQuiz.questions.length - 1) {
+      currentQ++;
+      renderQuiz();
+    } else {
+      showResult();
+    }
+  }
+
+  function prevQuiz() {
+    if (currentQ > 0) {
+      currentQ--;
+      renderQuiz();
+    }
+  }
+
+  function showResult() {
+    const total = activeQuiz.questions.length;
+    document.getElementById('quizCard').style.display = 'none';
+    document.getElementById('quizResultCard').style.display = 'block';
+    document.getElementById('resultNum').textContent = score;
+    document.getElementById('resultDenom').textContent = 'dari ' + total;
+    const pct = score / total;
+    let msg, sub;
+    if (pct === 1) { msg = "Luar biasa! 🏆"; sub = "Kamu menguasai materi ini dengan sempurna!"; }
+    else if (pct >= 0.8) { msg = "Hebat sekali! 🌟"; sub = "Pemahamanmu sangat baik. Pertahankan!"; }
+    else if (pct >= 0.6) { msg = "Bagus! 👍"; sub = "Sudah cukup paham. Coba pelajari ulang bagian yang masih ragu."; }
+    else if (pct >= 0.4) { msg = "Lumayan 💪"; sub = "Masih perlu belajar lagi. Yuk baca ulang modulnya!"; }
+    else { msg = "Tetap semangat! 📚"; sub = "Belajar adalah proses. Baca lagi modulnya dan coba lagi!"; }
+    document.getElementById('resultMsg').textContent = msg;
+    document.getElementById('resultSub').textContent = sub;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function restartQuiz() {
+    currentQ = 0;
+    score = 0;
+    answered = new Array(activeQuiz.questions.length).fill(null);
+    document.getElementById('quizCard').style.display = 'block';
+    document.getElementById('quizResultCard').style.display = 'none';
+    renderQuiz();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  buildQuizSelector();
+
+  // ============ GLOSSARY ============
+  const glossaryData = [
+    {term:"Bank Sentral", def:"Bank yang berfungsi sebagai bank sirkulasi dan sebagai induk dari bank-bank lain (banker of banks). Di Indonesia perannya dijalankan oleh Bank Indonesia."},
+    {term:"Bank Umum", def:"Badan usaha yang menghimpun dana dari masyarakat dalam bentuk simpanan dan menyalurkannya kepada masyarakat dalam rangka meningkatkan taraf hidup rakyat banyak."},
+    {term:"BPR", def:"Bank Perkreditan Rakyat, yaitu bank yang menerima simpanan hanya dalam bentuk deposito berjangka, tabungan, atau bentuk lain yang sejenis."},
+    {term:"Tabungan", def:"Produk simpanan di bank yang penyetoran dan penarikannya dapat dilakukan kapan saja."},
+    {term:"Deposito", def:"Produk simpanan di bank yang penyetorannya maupun penarikannya hanya dapat dilakukan pada waktu tertentu saja."},
+    {term:"Giro", def:"Produk simpanan perbankan yang dananya dapat ditarik kapan saja menggunakan cek, bilyet giro, atau pemindahbukuan, difokuskan untuk transaksi bisnis frekuensi tinggi."},
+    {term:"Cek", def:"Surat berharga di mana orang yang menerimanya bisa langsung menguangkannya di bank."},
+    {term:"Bilyet Giro", def:"Surat berharga di mana orang yang menerimanya tidak bisa menguangkan giro itu di bank, melainkan disetorkan ke dalam rekening."},
+    {term:"KPR", def:"Kredit Pemilikan Rumah, yaitu kredit untuk membeli rumah atau kebutuhan konsumtif lainnya dengan jaminan/agunan berupa rumah."},
+    {term:"Kredit Modal Kerja", def:"Kredit yang diberikan untuk pembiayaan modal kerja perusahaan, baik perusahaan perorangan maupun yang berbadan hukum."},
+    {term:"Kredit Investasi", def:"Kredit untuk membiayai pembangunan atau perluasan gedung maupun pabrik, pembelian mesin dan alat produksi, serta lain-lain investasi usaha."},
+    {term:"Kartu Kredit", def:"Alat pembayaran non tunai di mana penerbit kartu kredit memberikan pinjaman uang kepada konsumen, bukan mengambil uang dari rekening."},
+    {term:"Konsumen", def:"Pihak yang menggunakan produk atau layanan jasa keuangan, dan menjadi salah satu yang dilindungi oleh OJK."},
+    {term:"Bank Konvensional", def:"Bank yang menjalankan kegiatannya berdasarkan sistem bunga dan dapat berinvestasi pada usaha halal maupun haram."},
+    {term:"Bank Syariah", def:"Bank yang hanya berinvestasi pada usaha halal dan menjalankan kegiatannya berdasarkan sistem bagi hasil, margin keuntungan, dan fee."},
+    {term:"DPS", def:"Dewan Pengawas Syariah, yaitu lembaga yang mengawasi kegiatan bank syariah agar sesuai prinsip syariah."},
+    {term:"IKNB", def:"Industri Keuangan Non Bank, yaitu lembaga yang menghimpun dana dari masyarakat lalu menyalurkannya untuk kegiatan investasi serta menerbitkan surat berharga."},
+    {term:"Pasar Modal", def:"Tempat bertemunya pihak yang membutuhkan dana (emiten) dan pihak yang memiliki dana (investor) melalui perdagangan instrumen keuangan jangka panjang seperti saham dan obligasi."},
+    {term:"Emiten", def:"Perusahaan yang membutuhkan dana dan menerbitkan instrumen keuangan seperti saham atau obligasi di pasar modal."},
+    {term:"Saham", def:"Instrumen keuangan jangka panjang yang menunjukkan kepemilikan atas suatu perusahaan, diperdagangkan di pasar modal."},
+    {term:"Obligasi", def:"Instrumen keuangan jangka panjang berupa surat utang yang diperdagangkan di pasar modal."},
+    {term:"Koperasi", def:"Badan usaha atau perkumpulan otonom yang dimiliki dan dikelola anggota secara sukarela untuk meningkatkan kesejahteraan bersama berdasarkan asas kekeluargaan (UU No. 25 Tahun 1992)."},
+    {term:"Asuransi", def:"Perjanjian kontrak antara nasabah (tertanggung) dan perusahaan asuransi (penanggung), di mana nasabah membayar premi untuk mendapat perlindungan finansial atas risiko kerugian tak terduga."},
+    {term:"Tertanggung", def:"Pihak nasabah dalam asuransi yang membayar premi untuk mendapatkan perlindungan finansial."},
+    {term:"Penanggung", def:"Pihak perusahaan asuransi yang menerima premi dan memberikan perlindungan finansial kepada tertanggung."},
+    {term:"Premi", def:"Sejumlah uang yang dibayarkan nasabah kepada perusahaan asuransi untuk mendapatkan perlindungan finansial."},
+    {term:"Polis", def:"Ketentuan atau dokumen perjanjian yang mengatur perlindungan finansial dalam asuransi."},
+    {term:"Pegadaian", def:"Lembaga keuangan non bank milik negara (BUMN/anak usaha BRI) yang menyediakan pinjaman cepat dengan jaminan barang bergerak atau tidak bergerak, serta layanan investasi emas."},
+    {term:"Leasing", def:"Sewa guna usaha, yaitu pembiayaan barang modal atau aset oleh perusahaan pembiayaan (lessor) kepada pengguna (lessee) dengan cicilan berkala."},
+    {term:"Lessor", def:"Perusahaan pembiayaan yang menyediakan barang modal atau aset dalam transaksi leasing."},
+    {term:"Lessee", def:"Pihak pengguna yang menerima barang modal atau aset dalam transaksi leasing."},
+    {term:"Fintech", def:"Financial Technology, yaitu inovasi di industri jasa keuangan yang memanfaatkan teknologi digital untuk membuat layanan keuangan lebih praktis, efisien, dan inklusif."},
+    {term:"P2P Lending", def:"Peer-to-peer lending, yaitu layanan pinjaman yang difasilitasi melalui platform fintech."},
+    {term:"Crowdfunding", def:"Penggalangan atau patungan dana melalui platform fintech. Contohnya Kitabisa."},
+    {term:"Dana Pensiun", def:"Badan hukum yang mengelola dan menjalankan program yang menjanjikan manfaat pensiun."},
+    {term:"OJK", def:"Otoritas Jasa Keuangan, yaitu lembaga yang menyelenggarakan sistem pengaturan dan pengawasan terintegrasi terhadap keseluruhan kegiatan di sektor jasa keuangan."},
+    {term:"LPS", def:"Lembaga Penjamin Simpanan, yaitu lembaga yang menjamin simpanan nasabah penyimpan dan polis asuransi, serta turut menjaga stabilitas sistem perbankan."},
+    {term:"Blanket Guarantee", def:"Kebijakan pemerintah saat krisis 1998 untuk menjamin seluruh kewajiban pembayaran bank termasuk simpanan masyarakat, ditetapkan melalui Keppres No. 26 dan No. 193 Tahun 1998."},
+    {term:"Kebijakan Moneter", def:"Kebijakan pengendalian jumlah uang yang beredar agar sesuai dengan jumlah yang dibutuhkan sistem perekonomian, dijalankan oleh Bank Indonesia."},
+    {term:"UMKM", def:"Usaha Mikro, Kecil, dan Menengah, yaitu pelaku usaha yang banyak dilayani oleh BPR untuk mendukung inklusi keuangan."},
+    {term:"SBI", def:"Sertifikat Bank Indonesia, yaitu salah satu instrumen tempat BPR boleh menempatkan dananya selain deposito dan tabungan pada bank lain."}
+  ];
+
+  function renderGlossary(filter='', highlightTerm='') {
+    const grid = document.getElementById('glossaryGrid');
+    const filtered = glossaryData.filter(g =>
+      g.term.toLowerCase().includes(filter.toLowerCase()) ||
+      g.def.toLowerCase().includes(filter.toLowerCase())
+    );
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="glossary-empty">Tidak ada istilah yang cocok dengan pencarianmu.</div>';
+      return;
+    }
+    filtered.sort((a,b) => a.term.localeCompare(b.term));
+    grid.innerHTML = filtered.map(g => `
+      <div class="glossary-item" data-term="${g.term.toLowerCase()}">
+        <div class="glossary-term">${g.term}</div>
+        <div class="glossary-def">${g.def}</div>
+      </div>
+    `).join('');
+
+    if (highlightTerm) {
+      const target = grid.querySelector(`[data-term="${highlightTerm.toLowerCase()}"]`);
+      if (target) {
+        target.classList.add('highlight');
+        setTimeout(() => {
+          target.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }, 100);
+        setTimeout(() => target.classList.remove('highlight'), 3000);
+      }
+    }
+  }
+
+  document.getElementById('glossarySearch').addEventListener('input', (e) => {
+    renderGlossary(e.target.value);
+  });
+  renderGlossary();
+
+  // ============ BACKLINK HANDLER ============
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('.backlink');
+    if (!link) return;
+    e.preventDefault();
+    const term = link.dataset.term;
+    // navigate to glossary page
+    goPage('glossary');
+    // set search input value to the term so user sees the filter
+    const searchInput = document.getElementById('glossarySearch');
+    searchInput.value = term;
+    // render with highlight
+    renderGlossary(term, term);
+  });
+
+  updateProgress();
+</script>
+</body>
+</html>
